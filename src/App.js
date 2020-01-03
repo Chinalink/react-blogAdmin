@@ -1,6 +1,11 @@
+/*
+ * @Description: 
+ * @Author: HuGang
+ * @Date: 2020-01-02 15:28:42
+ * @LastEditTime : 2020-01-03 16:04:15
+ */
 import React from 'react';
 import logo from './logo.svg';
-import './App.css';
 
 function App() {
   return (
