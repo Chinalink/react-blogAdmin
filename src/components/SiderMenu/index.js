@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-01-05 23:00:48
- * @LastEditTime : 2020-01-05 23:36:21
+ * @LastEditTime : 2020-01-06 16:50:09
  */
 import React from 'react';
 import { Menu, Icon } from 'antd';
@@ -11,7 +11,6 @@ import { Link } from 'react-router-dom';
 const SubMenu = Menu.SubMenu
 
 const SiderMenu = (item) => {
-
   const renderSubMenu = (item) => {
     return (
       <SubMenu key={item.path} title={
@@ -20,7 +19,7 @@ const SiderMenu = (item) => {
           <span>{item.name}</span>
         </span>
       }>
-        {item.routes.map(renderMenu)}
+        {item.routes.map(SiderMenu)}
       </SubMenu>
     )
   }

@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-01-05 20:55:58
- * @LastEditTime : 2020-01-05 23:35:36
+ * @LastEditTime : 2020-01-06 14:37:57
  */
 import React from 'react';
 import { RenderRoutes } from './index';
@@ -19,7 +19,11 @@ export const menus = [
   { path: '/', exact: true, name: '首页', icon: 'video-camera', component: Home },
   {
     path: '/ui', name: 'UI', icon: 'video-camera', component: Ui, routes: [
-      { path: '/ui/button', name: '按钮', icon: 'video-camera', component: Button },
+      { 
+        path: '/ui/button', name: '按钮', icon: 'video-camera', component: Ui, routes: [
+          { path: '/ui/button/button1', name: '按钮1', icon: 'video-camera', component: Button, }
+        ] 
+      },
       { path: '/ui/icon', name: '图标', icon: 'video-camera', component: Icon }
     ]
   },

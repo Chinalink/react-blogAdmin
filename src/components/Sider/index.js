@@ -2,15 +2,13 @@
  * @Description:
  * @Author: HuGang
  * @Date: 2019-12-17 11:35:36
- * @LastEditTime : 2020-01-05 23:23:25
+ * @LastEditTime : 2020-01-06 16:50:00
  */
 import React, {useState} from 'react';
 import SiderMenu from '../SiderMenu';
 import { Menu } from 'antd';
 import { SiderWrap } from './style';
-
 import { menus } from '../../router/config';
-
 
 const Sider = () => {
   const [slidecollapsed, setSlidecollapsed] = useState(false)
