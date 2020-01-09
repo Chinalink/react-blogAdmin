@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-01-03 16:04:42
- * @LastEditTime : 2020-01-06 11:46:35
+ * @LastEditTime : 2020-01-08 10:18:13
  */
 import React from 'react';
 import { LayoutWrap, MainWrap } from './style';
