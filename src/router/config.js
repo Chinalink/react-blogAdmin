@@ -1,35 +1,35 @@
 /*
  * @Description: 
  * @Author: HuGang
- * @Date: 2020-01-05 20:55:58
- * @LastEditTime : 2020-01-06 14:37:57
- */
+ * @Date: 2020-07-11 20:31:56
+ * @LastEditTime: 2020-07-15 22:51:52
+ */ 
 import React from 'react';
-import { RenderRoutes } from './index';
+import { RenderRoutes } from './index'
 
-import Layout from '../components/Layout';
-import Home from '../views/Home';
-import Login from '../views/Login';
+import Home from '../pages/Home'
+import ArticleList from '../pages/Article/ArticleList'
 
-const Ui = ({ routes }) => <RenderRoutes routes={routes}></RenderRoutes>
-const Button = () => <h3>Button</h3>
 const Icon = () => <h3>Icon</h3>
+const List = () => <h3>首页</h3>
 
 export const menus = [
-  { path: '/', exact: true, name: '首页', icon: 'video-camera', component: Home },
+  { path: '/', exact: true, title: '首页', component: List },
   {
-    path: '/ui', name: 'UI', icon: 'video-camera', component: Ui, routes: [
-      { 
-        path: '/ui/button', name: '按钮', icon: 'video-camera', component: Ui, routes: [
-          { path: '/ui/button/button1', name: '按钮1', icon: 'video-camera', component: Button, }
-        ] 
-      },
-      { path: '/ui/icon', name: '图标', icon: 'video-camera', component: Icon }
+    path: '/article', title: '文章', component: RenderRoutes, subs: [
+      { path: '/article/list', title: '文章列表', component: ArticleList },
+      { path: '/article/new', title: '新建文章', component: Icon },
+      { path: '/article/category', title: '分类目录', component: Icon },
+      { path: '/article/tag', title: '标签', component: Icon }
     ]
-  },
+  }
 ]
 
 export const main = [
-  { path: '/', component: Layout, routes: menus },
-  { path: '/login', component: Login }
+  { path: '/', component: Home, subs: menus }
 ]
+
+export const RouterConfig = {
+  main,
+  menus
+}

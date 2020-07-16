@@ -1,0 +1,6 @@
+@import '~antd/dist/antd.css';
+
+#root, html, body {
+  height: 100%;
+  overflow: hidden;
+}

@@ -1,0 +1,51 @@
+.home-wrap {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100%;
+}
+
+.home-layout {
+  flex-direction: row;
+}
+
+.home-main .home-main__header, .home-main .home-main__content{
+  background: #fff;
+}
+
+.home-main .home-main__header {
+  padding: 0;
+}
+
+.logo {
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px;
+}
+
+.home-main__header .trigger {
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 16px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.home-main__header .trigger:hover {
+  color: #1890ff;
+}
+
+.home-main__wrap {
+  margin-top: 12px;
+}
+
+.home-main__wrap .home-main_breadcrumb {
+  margin-left: 16px;
+  margin-bottom: 5px;
+}
+
+.home-main .home-main__content {
+  margin: 0px 16px 24px;
+  padding: 24px;
+  min-height: 280px;
+}
