@@ -2,20 +2,27 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:01:15
- * @LastEditTime: 2020-07-16 01:41:58
+ * @LastEditTime: 2020-07-16 12:51:13
  */ 
 import React, { Component } from 'react';
-
 import { Button, Table } from 'antd';
 import SerchForm from '../../../components/ArticleList/SerchForm'
 
 import './style.css'
 
 class ArticleList extends Component {
-  formRef = React.createRef();
   constructor(props) {
     super(props);
     this.state = {}
+  }
+
+  componentDidMount() {
+    
+  }
+
+  serchArticleList = values  => {
+    console.log(this.formRef)
+    console.log(values);
   }
   
   render() {
@@ -23,7 +30,7 @@ class ArticleList extends Component {
     const data = [{ key: '1', title: '世界，您好！', author: 'xiaodai', category: '未分类', tags: '—' }]
     return (
       <div className="article-list__wrap">
-        <SerchForm />
+        <SerchForm onFinish={this.serchArticleList} />
         <Table bordered columns={columns} dataSource={data} className="article-table" />
       </div>
     );

@@ -9,6 +9,10 @@
   flex-direction: row;
 }
 
+.home-main {
+  height: 100vh;
+}
+
 .home-main .home-main__header, .home-main .home-main__content{
   background: #fff;
 }
