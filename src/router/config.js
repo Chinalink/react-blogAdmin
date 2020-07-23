@@ -2,14 +2,14 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:31:56
- * @LastEditTime: 2020-07-17 12:35:55
+ * @LastEditTime: 2020-07-23 19:42:04
  */ 
 import React from 'react';
 import { RenderRoutes } from './index'
 
-import Home from '../pages/Home'
-import ArticleList from '../pages/Article/ArticleList'
-import ArticleNew from '../pages/Article/ArticleNew'
+import Home from '../pages/Home/Home.js'
+import ArticleList from '../pages/Article/List/List.js'
+import ArticleNew from '../pages/Article/New/New.js'
 
 const Icon = () => <h3>Icon</h3>
 const List = () => <h3>首页</h3>
