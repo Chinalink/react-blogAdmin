@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:01:04
- * @LastEditTime: 2020-07-23 19:43:44
+ * @LastEditTime: 2020-07-25 00:08:55
  */ 
 // lib
 import React, { Component } from 'react';
@@ -13,7 +13,7 @@ import Sider from '../../components/Layout/Sider/Sider.js'
 import Header from '../../components/Layout/Header/Header.js'
 import Breadcrumb from '../../components/Layout/Breadcrumb/Breadcrumb.js'
 
-import { RenderRoutes } from '../../router';
+import { renderRoutes } from '../../router';
 import './style.css'
 
 const { Content } = Layout
@@ -39,7 +39,7 @@ class Home extends Component {
             <div className="home-main__wrap">
               <Breadcrumb routes={routes} />
               <Content className="home-main__content">
-                <RenderRoutes routes={routes} />
+                {renderRoutes(routes)}
               </Content>
             </div>
           </Layout>
