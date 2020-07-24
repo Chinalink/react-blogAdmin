@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:01:15
- * @LastEditTime: 2020-07-24 13:55:09
+ * @LastEditTime: 2020-07-25 00:36:43
  */ 
 import React, { Component, Fragment } from 'react';
 import SerchForm from '../../../components/Common/SearchForm/SearchForm.js'
@@ -40,12 +40,12 @@ class ArticleList extends Component {
   
   getFormItems = () => {
     const itemArr = [
-      { label: '文章标题', name: 'title', col: 14, render: <Input /> },
-      { label: '分类', name: 'category', col: 4, offset: 1, render: <SearchSelect /> },
-      { label: '作者', name: 'author', col: 4, offset: 1, render: <SearchSelect /> },
-      { label: '发布状态', name: 'status', col: 4, render: <SearchSelect /> },
-      { label: '日期', name: 'date', col: 6, offset: 1, render: <DatePicker.RangePicker format='YYYY/MM/DD' /> },
-      { className: 'search-button__wrap', col: 2, offset: 11, render: <Button type="primary" htmlType="submit">筛选</Button> }
+      { label: '文章标题', name: 'title', col: 6, render: <Input /> },
+      { label: '分类', name: 'category', col: 3, offset: 1, render: <SearchSelect /> },
+      { label: '作者', name: 'author', col: 3, offset: 1, render: <SearchSelect /> },
+      { label: '发布状态', name: 'status', col: 3, offset: 1, render: <SearchSelect /> },
+      { label: '日期', name: 'date', col: 5, offset: 1, render: <DatePicker.RangePicker format='YYYY/MM/DD' /> },
+      { className: 'search-button__wrap', col: 2, offset: 22, render: <Button type="primary" htmlType="submit">筛选</Button> }
     ]
     return itemArr
   }
