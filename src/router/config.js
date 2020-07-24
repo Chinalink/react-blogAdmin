@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:31:56
- * @LastEditTime: 2020-07-23 19:42:04
+ * @LastEditTime: 2020-07-24 12:55:39
  */ 
 import React from 'react';
 import { RenderRoutes } from './index'
@@ -17,7 +17,7 @@ const List = () => <h3>首页</h3>
 export const menus = [
   { path: '/', exact: true, title: '首页', component: List },
   {
-    path: '/article', title: '文章', component: RenderRoutes, subs: [
+    path: '/article', title: '文章管理', component: RenderRoutes, subs: [
       { path: '/article/list', title: '文章列表', component: ArticleList },
       { path: '/article/new', title: '新建文章', component: ArticleNew },
       { path: '/article/category', title: '分类目录', component: Icon },
