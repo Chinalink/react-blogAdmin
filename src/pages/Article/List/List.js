@@ -2,12 +2,14 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:01:15
- * @LastEditTime: 2020-07-24 12:57:46
+ * @LastEditTime: 2020-07-24 13:55:09
  */ 
 import React, { Component, Fragment } from 'react';
 import SerchForm from '../../../components/Common/SearchForm/SearchForm.js'
 import SearchSelect from '../../../components/Common/SearchSelect/SearchSelect.js'
 import { Button, Input, DatePicker, Table } from 'antd';
+
+import { APIgetUserInfo } from '../../../apis/UserApis.js'
 
 import './style.css'
 
@@ -68,8 +70,10 @@ class ArticleList extends Component {
     return columns
   }
 
-  serchArticleList = values => {
+  serchArticleList = async values => {
     console.log(values);
+    const res = await APIgetUserInfo(values)
+    console.log(res)
   }
 
   handlePreviewArticle = (text, record, index) => {
