@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-23 11:09:36
- * @LastEditTime: 2020-07-24 12:45:28
+ * @LastEditTime: 2020-07-25 09:54:23
  */ 
 import React, { Component } from 'react';
 import { Form, Row, Col } from 'antd'
@@ -28,7 +28,7 @@ class SearchForm extends Component {
     return arr.map((item, index) => {
       return (
         <Col key={index} span={item.col} offset={item.offset || 0}>
-          <Form.Item className="search-form__item" {...item}>{item.render}</Form.Item>
+          <Form.Item className="search-form__item" {...item}>{item.render && item.render}</Form.Item>
         </Col>
       )
     })
