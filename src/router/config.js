@@ -2,14 +2,16 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:31:56
- * @LastEditTime: 2020-07-25 00:26:14
+ * @LastEditTime: 2020-07-25 09:29:05
  */ 
 import React from 'react';
 import { RenderRoutes } from './index'
 
 import Home from '../pages/Home/Home.js'
+
 import ArticleList from '../pages/Article/List/List.js'
 import ArticleNew from '../pages/Article/New/New.js'
+import ArticleCategory from '../pages/Article/Category/Category.js'
 
 const Icon = () => <h3>Icon</h3>
 const List = () => <h3>首页</h3>
@@ -20,7 +22,7 @@ export const menus = [
     path: '/article', title: '文章管理', component: RenderRoutes, subs: [
       { path: '/article/list', title: '文章列表', component: ArticleList },
       { path: '/article/new', title: '新建文章', component: ArticleNew },
-      { path: '/article/category', title: '分类目录', component: Icon },
+      { path: '/article/category', title: '分类目录', component: ArticleCategory },
       { path: '/article/tag', title: '标签', component: Icon }
     ]
   }
