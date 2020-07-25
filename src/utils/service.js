@@ -2,14 +2,14 @@
  * @Description: axios 封装
  * @Author: HuGang
  * @Date: 2020-07-23 16:42:05
- * @LastEditTime: 2020-07-24 13:55:41
+ * @LastEditTime: 2020-07-25 21:07:45
  */ 
 import axios from 'axios'
 import Qs from 'qs'
 import { message } from 'antd';
 
 const Axios = axios.create({
-  baseURL: '127.0.0.1:3333/apis',
+  // baseURL: 'http://127.0.0.1:3444/apis',
   timeout: 15000,
   withCredentials: true, // 是否允许携带Cookie
   headers: {
@@ -37,26 +37,27 @@ Axios.interceptors.request.use(
 Axios.interceptors.response.use(
   res => {
     if (res.data && res.data.code !== 0) {
-      switch (res.data.code) {
-        case 4444:
-          return Promise.reject(res)
-        default:
-          message.error('系统繁忙，请稍后再试')
-          return Promise.reject(res)
+      if(res.data.code !== 1) {
+        message.error(res.data.msg)
       }
+      return Promise.resolve(res)
     }
     return res
   },
   error => {
-    if (error.response.status === 504 || error.response.status === 404) {
-      message.warning('服务器被吃了⊙﹏⊙∥')
-      console.warn("服务器被吃了⊙﹏⊙∥")
-    } else if (error.response.status === 401) {
-      message.warning('登录信息失效⊙﹏⊙∥')
-      console.warn("登录信息失效⊙﹏⊙∥")
-    } else if (error.response.status === 500) {
-      message.warning('服务器开小差了⊙﹏⊙∥')
-      console.warn("服务器开小差了⊙﹏⊙∥")
+    if(error && error.response) {
+      if (error.response.status === 504 || error.response.status === 404) {
+        message.warning('服务器被吃了⊙﹏⊙∥')
+        console.warn("服务器被吃了⊙﹏⊙∥")
+      } else if (error.response.status === 401) {
+        message.warning('登录信息失效⊙﹏⊙∥')
+        console.warn("登录信息失效⊙﹏⊙∥")
+      } else if (error.response.status === 500) {
+        message.warning('服务器开小差了⊙﹏⊙∥')
+        console.warn("服务器开小差了⊙﹏⊙∥")
+      }
+    } else {
+      message.error('没有联系到服务器哟~')
     }
     return Promise.reject(error)
   }
