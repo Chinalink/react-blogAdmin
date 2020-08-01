@@ -2,14 +2,14 @@
  * @Description: 分类目录
  * @Author: HuGang
  * @Date: 2020-07-25 09:27:47
- * @LastEditTime: 2020-08-01 15:22:48
+ * @LastEditTime: 2020-08-01 22:17:44
  */ 
 import React, { Component } from 'react';
 // 依赖组件
-import { Row, Col, Button, Input, TreeSelect, Table, Form, message, Modal } from 'antd';
+import { Row, Col, Button, Input, TreeSelect, Table, Form, message, Modal, Popconfirm } from 'antd';
 // 依赖工具 & API
 import Utils from '../../../utils/utils'
-import { APIcreateCategory, APIupdateCategory, APIgetCategoryList } from '../../../apis/ArticleApis'
+import { APIcreateCategory, APIupdateCategory, APIdeleteCategory, APIgetCategoryList } from '../../../apis/ArticleApis'
 
 class Category extends Component {
   constructor(props) {
@@ -33,11 +33,12 @@ class Category extends Component {
   }
 
   render() {
-    const { modalVisible, tableLoading, confirmLoading, categoryData } = this.state
+    const { modalVisible, tableLoading, confirmLoading, categoryData, isUpdate } = this.state
     const columns = this.getTableColumns()
-    const formOptions = { ref: this.categoryFromRef, preserve:false, labelCol: { span: 5 }, initialValues: { parentId: 'none'}, name: 'article_category_create' }
+    const formOptions = { ref: this.categoryFromRef, preserve:false, labelCol: { span: 5 }, initialValues: { parentId: 'none' }, name: 'article_category_create' }
     const formItems = this.getFormItems()
     const ModalFooter = this.renderModalFooterXml()
+    
     return (
       <Row gutter={[0, 16]}>
         <Col span="24">
@@ -48,7 +49,7 @@ class Category extends Component {
         </Col>
         {/* 创建分类Modal */}
         <Modal 
-          title="添加新分类目录"
+          title={`${isUpdate ? '更新' : '创建'}分类目录`}
           visible={modalVisible}
           destroyOnClose={true}
           footer={ModalFooter}
@@ -77,7 +78,7 @@ class Category extends Component {
   getFormItems = () => {
     const { categoryTreeData } = this.state
     const itemArr = [
-      { label: '分类ID', name: 'id', hidden: true },
+      { label: '分类ID', name: 'id', render: <Input disabled />, hidden: true },
       { label: '分类名称', name: 'name', render: <Input />, rules: [ {required: true, message: '分类名称不能为空' } ] },
       { label: '分类别名', name: 'alias', render: <Input />  },
       { label: '分类描述', name: 'desc', render: <Input /> },
@@ -98,7 +99,9 @@ class Category extends Component {
           <div className="table-action">
             <Button className="table-action__button" type="primary" size="small" onClick={this.handlePreviewArticle.bind(this, text, record, index)}>查看</Button>
             <Button className="table-action__button" type="primary" size="small" onClick={this.handleEditCategory.bind(this, text, record, index)}>编辑</Button>
-            <Button className="table-action__button" type="primary" size="small" danger onClick={this.handleRemoveCategory.bind(this, text, record, index)}>删除</Button>
+            <Popconfirm title="确认删除该分类吗？" onConfirm={this.handleRemoveCategory.bind(this, text, record, index)}>
+              <Button className="table-action__button" type="primary" size="small" danger>删除</Button>
+            </Popconfirm>
           </div>
         )
       }
@@ -145,7 +148,7 @@ class Category extends Component {
 
   // 创建分类目录
   actionCategory = async (values, APIcallBack) => {
-    const res = APIcallBack(values)
+    const res = await APIcallBack(values)
     
     if(res.code === 0) {
       message.info(res.msg)
@@ -153,11 +156,10 @@ class Category extends Component {
       this.getCategoryList()
     }
   }
-
+  
+  // 查看当前分类目录的文章
   handlePreviewArticle = (text, record, index) => {
-    console.log(text)
-    console.log(record)
-    console.log(index)
+    
   }
 
   // 编辑分类
@@ -176,9 +178,9 @@ class Category extends Component {
 
   // 删除分类
   handleRemoveCategory = (text, record, index) => {
-    console.log(text)
-    console.log(record)
-    console.log(index)
+    const params = { id: record.id }
+    
+    this.actionCategory(params, APIdeleteCategory) 
   }
 }
 

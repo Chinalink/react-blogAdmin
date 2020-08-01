@@ -2,7 +2,7 @@
  * @Description: axios 封装
  * @Author: HuGang
  * @Date: 2020-07-23 16:42:05
- * @LastEditTime: 2020-07-25 21:07:45
+ * @LastEditTime: 2020-08-01 19:27:52
  */ 
 import axios from 'axios'
 import Qs from 'qs'
@@ -79,6 +79,30 @@ export default {
   post(url, params = {}, config = {}) {
     return new Promise((resolve, reject) => {
       Axios.post(url, params, config).then(response => {
+        resolve(response.data);
+      }, err => {
+        reject(err);
+      })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  },
+  put(url, params = {}, config = {}) {
+    return new Promise((resolve, reject) => {
+      Axios.put(url, params, config).then(response => {
+        resolve(response.data);
+      }, err => {
+        reject(err);
+      })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  },
+  delete(url, params = {}) {
+    return new Promise((resolve, reject) => {
+      Axios.delete(url, {params: params}).then(response => {
         resolve(response.data);
       }, err => {
         reject(err);
