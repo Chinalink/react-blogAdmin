@@ -2,19 +2,27 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 18:01:15
- * @LastEditTime: 2020-07-12 13:25:35
+ * @LastEditTime: 2020-08-01 09:58:48
  */ 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
 import * as serviceWorker from './serviceWorker';
+import App from './App';
+// 依赖组件（国际化）
+import { ConfigProvider } from 'antd';
+import zhCN from 'antd/es/locale/zh_CN';
+import moment from 'moment';
+import 'moment/locale/zh-cn';
+moment.locale('zh-cn');
+
+
 
 const rootElement = document.getElementById('root')
 
 ReactDOM.render(
-  // <React.StrictMode>
+  <ConfigProvider locale={zhCN}>
     <App />,
-  // </React.StrictMode>,
+  </ConfigProvider>,
   rootElement
 );
 
