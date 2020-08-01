@@ -1,4 +1,6 @@
-
+.table-action {
+  text-align: center;
+}
 .table-action .table-action__button {
  margin: 0 4px;
 }

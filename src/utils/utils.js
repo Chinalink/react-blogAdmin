@@ -2,11 +2,11 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-25 17:40:07
- * @LastEditTime: 2020-07-25 18:11:41
+ * @LastEditTime: 2020-08-01 09:36:08
  */ 
 
 class Utils {
-  static arrToTreeData (arr, parentArr, idName = 'parrent_id') {
+  static arrToTreeData (arr, parentArr, idName = 'parrentId') {
     parentArr.map(pNode => {
       let childArr = []
       

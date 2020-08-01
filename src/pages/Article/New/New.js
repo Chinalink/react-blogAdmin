@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-17 11:07:59
- * @LastEditTime: 2020-07-30 13:22:13
+ * @LastEditTime: 2020-08-01 09:43:12
  */ 
 import React, { Component } from 'react'
 import { Input, DatePicker, Button, TreeSelect } from 'antd'
@@ -10,7 +10,7 @@ import SerchForm from '../../../components/Common/SearchForm/SearchForm.js'
 import SearchSelect from '../../../components/Common/SearchSelect/SearchSelect.js'
 
 import Utils from '../../../utils/utils'
-import { APIcreatePost, APIgetSortList } from '../../../apis/ArticleApis'
+import { APIcreatePost, APIgetCategoryList } from '../../../apis/ArticleApis'
 
 import SimpleMDE from 'react-simplemde-editor'
 import marked from 'marked';
@@ -92,7 +92,7 @@ class ArticleNew extends Component {
 
   // 查询分类列表目录
   getSortList = async () => {
-    const res = await APIgetSortList()
+    const res = await APIgetCategoryList()
     if (res.code === 1) {
       // 添加额外字段，用作antd table treeSelect使用
       const result = res.data.map(item => {
