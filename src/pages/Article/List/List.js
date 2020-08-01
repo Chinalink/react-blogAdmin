@@ -2,13 +2,14 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:01:15
- * @LastEditTime: 2020-07-25 00:36:43
+ * @LastEditTime: 2020-07-31 13:49:34
  */ 
 import React, { Component, Fragment } from 'react';
 import SerchForm from '../../../components/Common/SearchForm/SearchForm.js'
 import SearchSelect from '../../../components/Common/SearchSelect/SearchSelect.js'
 import { Button, Input, DatePicker, Table } from 'antd';
 
+import { APIgetArticleList } from '../../../apis/ArticleApis.js'
 import { APIgetUserInfo } from '../../../apis/UserApis.js'
 
 import './style.css'
@@ -16,36 +17,40 @@ import './style.css'
 class ArticleList extends Component {
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {
+      articleList: []
+    }
     this.serchFrom = React.createRef()
   }
 
   componentDidMount() {
-    
+    this.getAllArticleList()
   }
   
   render() {
+    const { articleList } = this.state
     const columns = this.getTableColumns()
     const formOptions = { ref: this.serchFrom, name: 'article_list_search', onFinish: this.serchArticleList }
     const formItems = this.getFormItems()
-    const data = [{ key: '1', title: '世界，您好！', author: 'xiaodai', category: '未分类', tags: '—' }]
+    // const data = [{ key: '1', title: '世界，您好！', author: 'xiaodai', category: '未分类', tags: '—' }]
 
     return (
       <Fragment>
         <SerchForm formOptions={formOptions} formItems={formItems} />
-        <Table bordered columns={columns} dataSource={data} className="article-table" />
+        <Table bordered columns={columns} dataSource={articleList} size="middle" className="article-table" />
       </Fragment>
     );
   }
   
   getFormItems = () => {
     const itemArr = [
-      { label: '文章标题', name: 'title', col: 6, render: <Input /> },
-      { label: '分类', name: 'category', col: 3, offset: 1, render: <SearchSelect /> },
-      { label: '作者', name: 'author', col: 3, offset: 1, render: <SearchSelect /> },
-      { label: '发布状态', name: 'status', col: 3, offset: 1, render: <SearchSelect /> },
-      { label: '日期', name: 'date', col: 5, offset: 1, render: <DatePicker.RangePicker format='YYYY/MM/DD' /> },
-      { className: 'search-button__wrap', col: 2, offset: 22, render: <Button type="primary" htmlType="submit">筛选</Button> }
+      { label: '文章标题', name: 'title', col: 8, render: <Input /> },
+      { label: '分类', name: 'category', col: 7, offset: 1, render: <SearchSelect /> },
+      { label: '标签', name: 'tags', col: 7, offset: 1, render: <SearchSelect /> },
+      { label: '发布状态', name: 'status', col: 4, render: <SearchSelect /> },
+      { label: '作者', name: 'author', col: 4, offset: 1, render: <SearchSelect /> },
+      { label: '日期', name: 'date', col: 7, offset: 1, render: <DatePicker.RangePicker format='YYYY/MM/DD' /> },
+      { className: 'search-button__wrap', col: 2, offset: 5, render: <Button type="primary" htmlType="submit">筛选</Button> }
     ]
     return itemArr
   }
@@ -53,11 +58,20 @@ class ArticleList extends Component {
   // 表格列配置
   getTableColumns = () => {
     const columns = [
-      { key: 'title', title: '标题', dataIndex: 'title' },
+      { key: 'post_title', title: '标题', dataIndex: 'post_title' },
       { key: 'author', title: '作者', dataIndex: 'author' },
-      { key: 'category', title: '分类目录', dataIndex: 'category' },
+      { key: 'Sorts', title: '分类目录', dataIndex: 'Sorts', render:(text, record, index) => (
+        <div>
+          {
+            record.Sorts.map(item => (
+              <div key={item.id}>{item.sort_name}</div>
+            ))
+          }
+        </div>
+      )},
       { key: 'tags', title: '标签', dataIndex: 'tags' },
-      { key: 'date', title: '日期', dataIndex: 'date' },
+      { key: 'createdAt', title: '发布日期', dataIndex: 'createdAt' },
+      { key: 'updatedAt', title: '更新日期', dataIndex: 'updatedAt' },
       {
         key: 'action', title: '操作', dataIndex: 'action', render: (text, record, index) => (
         <div className="table-action">
@@ -68,6 +82,17 @@ class ArticleList extends Component {
       )}
     ]
     return columns
+  }
+
+  getAllArticleList = async () => {
+    const res = await APIgetArticleList()
+    if(res.code === 1) {
+      const data = res.data.map(item => {
+        item.key = item.id
+        return item
+      })
+      this.setState({ articleList: data })
+    }
   }
 
   serchArticleList = async values => {

@@ -2,7 +2,7 @@
  * @Description: 分类目录
  * @Author: HuGang
  * @Date: 2020-07-25 09:27:47
- * @LastEditTime: 2020-07-25 22:18:25
+ * @LastEditTime: 2020-07-31 13:51:06
  */ 
 import React, { Component } from 'react';
 import { Row, Col, Button, Input, TreeSelect, Table, Form, message } from 'antd';
@@ -36,7 +36,7 @@ class Category extends Component {
     return (
       <Row>
         <Col span="24">
-          <Table bordered columns={columns} dataSource={sortData} className="article-table" />
+          <Table bordered columns={columns} dataSource={sortData} size="middle" className="article-table" />
         </Col>
         <Col span="8" offset="1">
           <h3 className="article-category-title">添加新分类目录</h3>

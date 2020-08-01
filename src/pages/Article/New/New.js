@@ -2,12 +2,15 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-17 11:07:59
- * @LastEditTime: 2020-07-24 13:11:58
+ * @LastEditTime: 2020-07-30 13:22:13
  */ 
 import React, { Component } from 'react'
-import { Input, DatePicker, Button } from 'antd'
+import { Input, DatePicker, Button, TreeSelect } from 'antd'
 import SerchForm from '../../../components/Common/SearchForm/SearchForm.js'
 import SearchSelect from '../../../components/Common/SearchSelect/SearchSelect.js'
+
+import Utils from '../../../utils/utils'
+import { APIcreatePost, APIgetSortList } from '../../../apis/ArticleApis'
 
 import SimpleMDE from 'react-simplemde-editor'
 import marked from 'marked';
@@ -23,8 +26,11 @@ class ArticleNew extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: '',
       htmlValue: '',
+      postData: {
+        content: ''
+      },
+      sortTreeData: [],
       editorOptions: {
         spellChecker: false,
         toolbar: [
@@ -39,13 +45,15 @@ class ArticleNew extends Component {
   }
 
   componentDidMount() {
+    this.getSortList()
     marked.setOptions({
       highlight: code => hljs.highlightAuto(code).value,
     });
   }
 
   render() { 
-    const { value, htmlValue, editorOptions } = this.state
+    const { postData, htmlValue, editorOptions } = this.state
+    const { content } = postData
     const headerFormOptions = { ref: this.serchFrom, name: 'article_new_header__search', onValuesChange: this.changeArticleOption }
     const headerFormItems = this.getHeaderFormItems()
 
@@ -55,14 +63,14 @@ class ArticleNew extends Component {
         <SimpleMDE
           ref={(ref) => this.simpleMDE = ref}
           id="write"
-          value={value}
+          value={content}
           options={editorOptions}
           onChange={this.handleChange}
         />
         {/* markdown 渲染测试 */}
         <div dangerouslySetInnerHTML={{ __html: marked(htmlValue) }}></div>
         <div className="article-new__footer">
-          <Button type="primary">保存草稿</Button>
+          <Button type="primary" onClick={this.handleSubmitArticle}>保存草稿</Button>
           <Button className="article-submit" type="primary">发布</Button>
         </div>
       </div>
@@ -70,25 +78,48 @@ class ArticleNew extends Component {
   }
 
   getHeaderFormItems = () => {
+    const { sortTreeData } = this.state
     const itemArr = [
-      { label: '标题', name: 'title', col: 16, render: <Input /> },
+      { label: '标题', name: 'post_title', col: 16, render: <Input /> },
       { label: '定时发布', name: 'time', col: 7, offset: 1, render: <DatePicker format="YYYY-MM-DD HH:mm:ss" /> },
-      { label: '标签', name: 'tags', col: 9, render: <SearchSelect /> },
-      { label: '分类目录', name: 'category', col: 6, offset: 1, render: <SearchSelect /> },
-      { label: '作者', name: 'author', col: 3, offset: 1, render: <SearchSelect /> },
-      { label: '公开度', name: 'openness', col: 3, offset: 1, render: <SearchSelect /> },
+      { label: '标签', name: 'tags', col: 12, render: <SearchSelect /> },
+      { label: '分类目录', name: 'category', col: 11, offset: 1, render: <TreeSelect treeData={sortTreeData} placeholder="请选择分类" allowClear multiple treeDataSimpleMode /> },
+      { label: '作者', name: 'post_author', col: 4, render: <SearchSelect /> },
+      { label: '公开度', name: 'openness', col: 4, offset: 1, render: <SearchSelect /> },
     ]
     return itemArr
   }
 
+  // 查询分类列表目录
+  getSortList = async () => {
+    const res = await APIgetSortList()
+    if (res.code === 1) {
+      // 添加额外字段，用作antd table treeSelect使用
+      const result = res.data.map(item => {
+        item.title = item.sort_name // treeSelect 需要
+        item.value = item.id // treeSelect 需要
+        item.key = item.id // treeTable 需要
+        return item
+      })
+      // 数据格式转换
+      const parentArr = result.filter(i => i.sort_parentId == null)
+      const sortTreeData = Utils.arrToTreeData(result, parentArr, 'sort_parentId')
+      this.setState({ sortTreeData })
+    }
+  }
+
   handleChange = (value) => {
-    const htmlValue = marked(value)
-    this.setState({ value, htmlValue: htmlValue })
+    const { postData } = this.state
+    let tempPostData = {}
+    tempPostData = { ...postData, content: value }
+    this.setState({ postData: tempPostData })
   }
 
   changeArticleOption = (changedValues, allValues) => {
-    console.log('changedValues', changedValues)
-    console.log('allValues', allValues)
+    const { postData } = this.state
+    let tempPostData = {}
+    tempPostData = { ...tempPostData, ...postData, ...allValues}
+    this.setState({ postData: tempPostData })
   }
 
   handleSaveArticle = () => {
@@ -96,8 +127,10 @@ class ArticleNew extends Component {
   }
 
   // 保存文章
-  handleSubmitArticle = () => {
-    
+  handleSubmitArticle = async () => {
+    const { postData } = this.state
+    const res = await APIcreatePost(postData)
+    console.log(res)
   }
 }
  
