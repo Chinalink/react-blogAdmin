@@ -2,13 +2,14 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:01:15
- * @LastEditTime: 2020-07-31 13:49:34
+ * @LastEditTime: 2020-08-02 17:31:12
  */ 
 import React, { Component, Fragment } from 'react';
+// 依赖组件
 import SerchForm from '../../../components/Common/SearchForm/SearchForm.js'
 import SearchSelect from '../../../components/Common/SearchSelect/SearchSelect.js'
 import { Button, Input, DatePicker, Table } from 'antd';
-
+// 依赖API
 import { APIgetArticleList } from '../../../apis/ArticleApis.js'
 import { APIgetUserInfo } from '../../../apis/UserApis.js'
 
@@ -58,13 +59,13 @@ class ArticleList extends Component {
   // 表格列配置
   getTableColumns = () => {
     const columns = [
-      { key: 'post_title', title: '标题', dataIndex: 'post_title' },
+      { key: 'title', title: '标题', dataIndex: 'title' },
       { key: 'author', title: '作者', dataIndex: 'author' },
-      { key: 'Sorts', title: '分类目录', dataIndex: 'Sorts', render:(text, record, index) => (
+      { key: 'sorts', title: '分类目录', dataIndex: 'sorts', render:(text, record, index) => (
         <div>
           {
-            record.Sorts.map(item => (
-              <div key={item.id}>{item.sort_name}</div>
+            record.sorts.map(item => (
+              <div key={item.id}>{item.name}</div>
             ))
           }
         </div>

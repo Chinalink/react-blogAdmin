@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 19:55:16
- * @LastEditTime: 2020-07-25 00:24:35
+ * @LastEditTime: 2020-08-02 13:56:11
  */ 
 import React from 'react';
 import {Route} from 'react-router-dom'
@@ -29,7 +29,7 @@ export const RouteWithSubRoutes = (route) => {
     <Route
       path={route.path}
       exact={route.exact}
-      render={() => (<route.component routes={route.subs} />)}
+      render={(props) => (<route.component {...props} routes={route.subs} />)}
      />
   )
 }
