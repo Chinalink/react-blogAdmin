@@ -2,13 +2,13 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:01:15
- * @LastEditTime: 2020-08-02 17:31:12
+ * @LastEditTime: 2020-08-02 18:32:53
  */ 
 import React, { Component, Fragment } from 'react';
 // 依赖组件
 import SerchForm from '../../../components/Common/SearchForm/SearchForm.js'
 import SearchSelect from '../../../components/Common/SearchSelect/SearchSelect.js'
-import { Button, Input, DatePicker, Table } from 'antd';
+import { Button, Input, DatePicker, Tag, Table } from 'antd';
 // 依赖API
 import { APIgetArticleList } from '../../../apis/ArticleApis.js'
 import { APIgetUserInfo } from '../../../apis/UserApis.js'
@@ -59,20 +59,24 @@ class ArticleList extends Component {
   // 表格列配置
   getTableColumns = () => {
     const columns = [
-      { key: 'title', title: '标题', dataIndex: 'title' },
+      { key: 'title', title: '标题', dataIndex: 'title', render: (text, record, index) => (
+        [
+          <span className="article-table__title">{record.title}</span>, 
+          <Tag color={`${record.status ? '#2db7f5' : '#87d068'}`}>{record.status ? '已发布' : '草稿'}</Tag>
+        ]
+      )},
       { key: 'author', title: '作者', dataIndex: 'author' },
-      { key: 'sorts', title: '分类目录', dataIndex: 'sorts', render:(text, record, index) => (
-        <div>
+      { key: 'sorts', title: '分类目录', dataIndex: 'sorts', render: (text, record, index) => (
+        <Fragment>
           {
             record.sorts.map(item => (
-              <div key={item.id}>{item.name}</div>
+              <span key={item.id}>{item.name}、</span>
             ))
           }
-        </div>
+        </Fragment>
       )},
       { key: 'tags', title: '标签', dataIndex: 'tags' },
-      { key: 'createdAt', title: '发布日期', dataIndex: 'createdAt' },
-      { key: 'updatedAt', title: '更新日期', dataIndex: 'updatedAt' },
+      { key: 'updatedAt', title: '最后修改日期', dataIndex: 'updatedAt' },
       {
         key: 'action', title: '操作', dataIndex: 'action', render: (text, record, index) => (
         <div className="table-action">

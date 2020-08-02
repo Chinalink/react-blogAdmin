@@ -4,3 +4,7 @@
 .table-action .table-action__button {
  margin: 0 4px;
 }
+
+.article-table__title {
+  margin-right: 16px;
+}
