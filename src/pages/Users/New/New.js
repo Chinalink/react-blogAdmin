@@ -2,10 +2,11 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-02 19:01:33
- * @LastEditTime: 2020-08-02 22:43:03
+ * @LastEditTime: 2020-08-05 22:59:28
  */ 
 import React, { Component, Fragment } from 'react';
-import { Form, Input, Button, Select } from 'antd';
+import { Form, Input, Button } from 'antd';
+import SearchSelect from '../../../components/Common/SearchSelect/SearchSelect.js'
 
 import './style.css'
 
@@ -13,7 +14,10 @@ class UserNew extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputValue: '12121'
+      EmailRules: [
+        { type: 'email', message: 'The input is not valid E-mail!' },
+        { required: true, message: 'Please input your E-mail!' },
+      ]
     }
   }
 
@@ -38,12 +42,13 @@ class UserNew extends Component {
   }
 
   getFormItems = () => {
+    const {EmailRules} = this.state
     const itemArr = [
       { label: '用户名', name: 'user', render: <Input />, rules: [{ required: true, message: '用户名不能为空' }] },
-      { label: '密码', name: 'password', render: <Input />, rules: [{ required: true, message: '密码不能为空' }] },
+      { label: '密码', name: 'password', render: <Input.Password />, rules: [{ required: true, message: '密码不能为空' }] },
       { label: '昵称', name: 'nikeName', render: <Input />,  },
-      { label: 'Email', name: 'email', render: <Input /> },
-      { label: '角色', name: 'role', render: <Select /> },
+      { label: 'Email', name: 'email', render: <Form.Item name='email' noStyle rules={ EmailRules }><Input/></Form.Item>},
+      { label: '角色', name: 'role', render: <SearchSelect /> },
     ]
     return itemArr
   }

@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:31:56
- * @LastEditTime: 2020-08-02 21:51:24
+ * @LastEditTime: 2020-08-05 21:51:30
  */ 
 import React from 'react';
 import { RenderRoutes } from './index'
@@ -35,6 +35,9 @@ export const menus = [
       { path: '/user/new', title: '添加用户', component: UserNew },
       { path: '/user/info', title: '个人资料', component: UserList },
     ]
+  },
+  {
+    path: '/theme', title: '主题设置', component: RenderRoutes, 
   },
 ]
 

@@ -2,13 +2,13 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-02 17:18:45
- * @LastEditTime: 2020-08-02 18:10:14
+ * @LastEditTime: 2020-08-05 22:34:34
  */ 
 import React, { Component, Fragment } from 'react';
 // 依赖组件
 import SerchForm from '../../../components/Common/SearchForm/SearchForm.js'
 import SearchSelect from '../../../components/Common/SearchSelect/SearchSelect.js'
-import { Row, Col, Button, Input, Table} from 'antd'
+import { Button, Input, Table} from 'antd'
 
 class UserList extends Component {
   constructor(props) {
