@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 18:01:15
- * @LastEditTime: 2020-08-01 09:58:48
+ * @LastEditTime: 2020-08-07 00:33:29
  */ 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -21,7 +21,7 @@ const rootElement = document.getElementById('root')
 
 ReactDOM.render(
   <ConfigProvider locale={zhCN}>
-    <App />,
+    <App />
   </ConfigProvider>,
   rootElement
 );
