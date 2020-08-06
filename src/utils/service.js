@@ -2,7 +2,7 @@
  * @Description: axios 封装
  * @Author: HuGang
  * @Date: 2020-07-23 16:42:05
- * @LastEditTime: 2020-08-01 19:27:52
+ * @LastEditTime: 2020-08-07 00:17:10
  */ 
 import axios from 'axios'
 import Qs from 'qs'
@@ -46,20 +46,12 @@ Axios.interceptors.response.use(
   },
   error => {
     if(error && error.response) {
-      if (error.response.status === 504 || error.response.status === 404) {
-        message.warning('服务器被吃了⊙﹏⊙∥')
-        console.warn("服务器被吃了⊙﹏⊙∥")
-      } else if (error.response.status === 401) {
-        message.warning('登录信息失效⊙﹏⊙∥')
-        console.warn("登录信息失效⊙﹏⊙∥")
-      } else if (error.response.status === 500) {
-        message.warning('服务器开小差了⊙﹏⊙∥')
-        console.warn("服务器开小差了⊙﹏⊙∥")
-      }
+      const errorMsg = (error.response.data && error.response.data.msg) || '网络请求错误'
+      message.warning(errorMsg)
     } else {
       message.error('没有联系到服务器哟~')
     }
-    return Promise.reject(error)
+    return Promise.reject(error.response.data)
   }
 )
 
