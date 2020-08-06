@@ -2,12 +2,13 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:31:56
- * @LastEditTime: 2020-08-05 21:51:30
+ * @LastEditTime: 2020-08-05 23:18:15
  */ 
 import React from 'react';
 import { RenderRoutes } from './index'
 
 import Home from '../pages/Home/Home.js'
+import Login from '../pages/Login/Login.js'
 
 import ArticleList from '../pages/Article/List/List.js'
 import ArticleNew from '../pages/Article/New/New.js'
@@ -42,7 +43,7 @@ export const menus = [
 ]
 
 export const main = [
-  { path: '/login', exact: true, title: '登录', component: Icon},
+  { path: '/login', exact: true, title: '登录', component: Login},
   { path: '/', component: Home, subs: menus }
 ]
 
