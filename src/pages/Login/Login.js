@@ -5,8 +5,9 @@
 //  * @LastEditTime: 2020-08-05 23:30:36
 //  */
 import React, { Component } from 'react';
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { APIUserLogin } from '../../apis/UserApis'
 
 import './style.css'
 
@@ -20,7 +21,7 @@ class Login extends Component {
     const fromOptions = { labelCol: { span: 4 }, onFinish: this.onFinish }
     return (
       <Form className="user-login-form" {...fromOptions}>
-        <Form.Item name="username" rules={[{required: true,message: 'Please input your Username!'}]} >
+        <Form.Item name="user" rules={[{required: true,message: 'Please input your Username!'}]} >
           <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="请输入用户名或邮箱" />
         </Form.Item>
         <Form.Item name="password" rules={[ { required: true, message: 'Please input your Password!', }]}>
@@ -37,7 +38,21 @@ class Login extends Component {
     );
   }
   onFinish = (values) => {
-    console.log(values)
+    this.submitLogin(values)
+  }
+
+  submitLogin = async (values) => {
+    const { history } = this.props
+    const params = values
+    const res = await APIUserLogin(params)
+    if(res.code === 0) {
+      const token = res.data.token
+      localStorage.setItem('token', token)
+      message.info(res.msg)
+      setTimeout(() => {
+        history.push({ pathname: '/index' })
+      }, 1000)
+    }
   }
 };
 export default Login;
