@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-02 19:01:33
- * @LastEditTime: 2020-08-08 17:01:31
+ * @LastEditTime: 2020-08-08 17:31:17
  */ 
 import React, { Component, Fragment } from 'react';
 import { Form, Input, Button, Upload, message } from 'antd';
@@ -68,18 +68,17 @@ class UserInfo extends Component {
     };
     const itemArr = [
       { name: 'basicInfo', render: <h3>基本信息</h3> },
-      { label: '用户名', name: 'user', render: <Input />, rules: [{ required: true, message: '用户名不能为空' }]},
+      { label: '用户名', name: 'user', render: <Input disabled/>, rules: [{ required: true, message: '用户名不能为空' }]},
       { label: '昵称', name: 'nikeName', render: <Input />},
       { name: 'contactInfo', render: <h3>联系信息</h3> },
       { label: '邮箱', name: 'email', render: <Input />, rules: EmailRules },
-      { label: '站点', name: 'webUrl', render: <Input />},
       { label: 'QQ', name: 'qq', render: <Input />},
       { label: '微信', name: 'wechat', render: <Input />},
       { label: 'Github', name: 'github', render: <Input />},
       { name: 'aboutYou', render: <h3>关于您自己</h3>},
-      { label: '个人说明', name: 'introduce', render: <Input.TextArea rows={4} />},
+      { label: '个人简介', name: 'introduce', render: <Input.TextArea rows={4} />},
       {
-        label: '资料图片', name: 'avatar', render: 
+        label: '头像', name: 'avatar', render: 
           <Upload name="avatar" listType="picture-card" className="avatar-uploader" {...props} onChange={this.handleChange} >
             {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
           </Upload>
@@ -110,6 +109,9 @@ class UserInfo extends Component {
   };
 
   onFinish = (values) => {
+    delete values.basicInfo
+    delete values.contactInfo
+    delete values.aboutYou
     console.log(values)
   }
 
