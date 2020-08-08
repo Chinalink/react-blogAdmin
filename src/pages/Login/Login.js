@@ -2,13 +2,13 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-05 23:07:16
- * @LastEditTime: 2020-08-08 17:21:48
+ * @LastEditTime: 2020-08-08 17:28:18
  */
 import React, { Component } from 'react';
 import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { APIUserLogin } from '../../apis/UserApis'
-import Utils from '../../../utils/utils'
+import Utils from '../../utils/utils'
 
 import './style.css'
 
