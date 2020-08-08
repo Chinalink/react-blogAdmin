@@ -2,10 +2,9 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:31:56
- * @LastEditTime: 2020-08-08 21:42:20
+ * @LastEditTime: 2020-08-08 22:06:36
  */ 
 import React from 'react';
-import { RenderRoutes } from './index'
 
 import Home from '../pages/Home/Home.js'
 import Login from '../pages/Login/Login.js'
