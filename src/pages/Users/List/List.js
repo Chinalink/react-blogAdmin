@@ -2,13 +2,16 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-02 17:18:45
- * @LastEditTime: 2020-08-05 22:34:34
+ * @LastEditTime: 2020-08-09 00:22:04
  */ 
 import React, { Component, Fragment } from 'react';
 // 依赖组件
 import SerchForm from '../../../components/Common/SearchForm/SearchForm.js'
 import SearchSelect from '../../../components/Common/SearchSelect/SearchSelect.js'
 import { Button, Input, Table} from 'antd'
+
+// API
+import { APIgetUserList } from '../../../apis/UserApis'
 
 class UserList extends Component {
   constructor(props) {
@@ -45,22 +48,31 @@ class UserList extends Component {
   getTableColumns = () => {
     const columns = [
       { key: 'user', title: '用户名', dataIndex: 'user' },
-      { key: 'author', title: '昵称', dataIndex: 'author' },
+      { key: 'author', title: '昵称', dataIndex: 'nickName' },
       { key: 'email', title: '电子邮件', dataIndex: 'email' },
-      { key: 'rols', title: '角色', dataIndex: 'rols' },
+      { key: 'rols', title: '角色', dataIndex: 'roles' },
       { key: 'createdAt', title: '注册时间', dataIndex: 'createdAt' },
-      {
-        key: 'action', title: '操作', dataIndex: 'action', render: (text, record, index) => (
-          <div className="table-action">
-            <Button className="table-action__button" type="primary" size="small" onClick={this.handleEditArticle.bind(this, text, record, index)}>编辑</Button>
-            <Button className="table-action__button" type="primary" size="small" danger onClick={this.handleRemoveArticle.bind(this, text, record, index)}>删除</Button>
-          </div>
-        )
-      }
+      // {
+      //   key: 'action', title: '操作', dataIndex: 'action', render: (text, record, index) => (
+      //     <div className="table-action">
+      //       <Button className="table-action__button" type="primary" size="small" onClick={this.handleEditArticle.bind(this, text, record, index)}>编辑</Button>
+      //       <Button className="table-action__button" type="primary" size="small" danger onClick={this.handleRemoveArticle.bind(this, text, record, index)}>删除</Button>
+      //     </div>
+      //   )
+      // }
     ]
     return columns
   }
-  
+
+  componentDidMount() {
+    this.getUserList()
+  }
+  // 查询用户列表
+  getUserList = async () => {
+    const res = await APIgetUserList()
+    const userData = res.data
+    this.setState({ userData })
+  }
 }
  
 export default UserList;
