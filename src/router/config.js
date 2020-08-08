@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:31:56
- * @LastEditTime: 2020-08-05 23:18:15
+ * @LastEditTime: 2020-08-08 15:09:55
  */ 
 import React from 'react';
 import { RenderRoutes } from './index'
@@ -14,10 +14,10 @@ import ArticleList from '../pages/Article/List/List.js'
 import ArticleNew from '../pages/Article/New/New.js'
 import ArticleCategory from '../pages/Article/Category/Category.js'
 
-import UserList from '../pages/Users/List/List.js'
 import UserNew from '../pages/Users/New/New.js'
+import UserList from '../pages/Users/List/List.js'
+import UserInfo from '../pages/Users/Info/Info.js'
 
-const Icon = () => <h3>Icon</h3>
 const List = () => <h3>首页</h3>
 
 export const menus = [
@@ -34,7 +34,7 @@ export const menus = [
     path: '/user', title: '用户管理', component: RenderRoutes, subs: [
       { path: '/user/list', title: '用户列表', component: UserList },
       { path: '/user/new', title: '添加用户', component: UserNew },
-      { path: '/user/info', title: '个人资料', component: UserList },
+      { path: '/user/info', title: '个人资料', component: UserInfo },
     ]
   },
   {
