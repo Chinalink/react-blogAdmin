@@ -2,10 +2,11 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:01:04
- * @LastEditTime: 2020-08-08 23:15:33
+ * @LastEditTime: 2020-08-09 01:00:15
  */ 
 // lib
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom'
 import { Layout } from 'antd';
 
 // component
@@ -45,6 +46,7 @@ class Home extends Component {
               <Breadcrumb routes={routes} />
               <Content className="home-main__content">
                 {renderRoutes(routes)}
+                <Redirect from='/' to='/index' />
               </Content>
             </div>
           </Layout>
