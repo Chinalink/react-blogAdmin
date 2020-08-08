@@ -2,19 +2,13 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-05 23:07:16
- * @LastEditTime: 2020-08-08 15:00:04
+ * @LastEditTime: 2020-08-08 17:21:48
  */
-// /*
-//  * @Description: 
-//  * @Author: HuGang
-//  * @Date: 2020-08-05 23:07:16
-//  * @LastEditTime: 2020-08-05 23:30:36
-//  */
 import React, { Component } from 'react';
 import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { APIUserLogin } from '../../apis/UserApis'
-// import md5 from './md5';
+import Utils from '../../../utils/utils'
 
 import './style.css'
 
@@ -45,8 +39,7 @@ class Login extends Component {
     );
   }
   onFinish = (values) => {
-    // let passwordM = md5(values.password)
-    // console.log(passwordM);
+    values.password = Utils.stringToMd5(values.password)
     if (values.remember === true) {
       console.log('记住密码');
       localStorage.setItem("user", values.user)
@@ -61,8 +54,6 @@ class Login extends Component {
   componentDidMount() {
     if (localStorage.length !== 0) {
       console.log(localStorage.user);
-      // user.values = localStorage.user
-      // password.values = localStorage.password
     }
   }
   submitLogin = async (values) => {
@@ -71,7 +62,7 @@ class Login extends Component {
     const res = await APIUserLogin(params)
     if(res.code === 0) {
       const token = res.data.token
-      localStorage.setItem('token', token)
+      sessionStorage.setItem('token', token)
       message.info(res.msg)
       setTimeout(() => {
         history.push({ pathname: '/index' })
