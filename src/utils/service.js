@@ -2,11 +2,14 @@
  * @Description: axios 封装
  * @Author: HuGang
  * @Date: 2020-07-23 16:42:05
- * @LastEditTime: 2020-08-08 17:22:39
+ * @LastEditTime: 2020-08-08 21:18:15
  */ 
 import axios from 'axios'
 import Qs from 'qs'
 import { message } from 'antd';
+import { createBrowserHistory  } from 'history'
+
+const history = createBrowserHistory();
 
 const Axios = axios.create({
   // baseURL: 'http://127.0.0.1:3444/apis',
@@ -49,6 +52,10 @@ Axios.interceptors.response.use(
     if(error && error.response) {
       const errorMsg = (error.response.data && error.response.data.msg) || '网络请求错误'
       message.warning(errorMsg)
+      if(error.response.status === 401 && error.response.data.code === 1004) {
+        history.push({ pathname: '/login'})
+        console.log(history)
+      }
     } else {
       message.error('没有联系到服务器哟~')
     }
