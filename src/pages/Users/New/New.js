@@ -2,11 +2,13 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-02 19:01:33
- * @LastEditTime: 2020-08-05 22:59:28
+ * @LastEditTime: 2020-08-08 15:34:04
  */ 
 import React, { Component, Fragment } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 import SearchSelect from '../../../components/Common/SearchSelect/SearchSelect.js'
+import Utils from '../../../utils/utils'
+import { APIgetRolesList, APIUserRegister } from '../../../apis/UserApis'
 
 import './style.css'
 
@@ -14,11 +16,16 @@ class UserNew extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      rolesData: [], // 角色列表
       EmailRules: [
-        { type: 'email', message: 'The input is not valid E-mail!' },
-        { required: true, message: 'Please input your E-mail!' },
+        { type: 'email', message: '您输入的邮箱格式不正确！' },
+        { required: true, message: '请输入您的邮箱！' },
       ]
     }
+  }
+
+  componentDidMount() {
+    this.getRolesList()
   }
 
   render() {
@@ -42,19 +49,38 @@ class UserNew extends Component {
   }
 
   getFormItems = () => {
-    const {EmailRules} = this.state
+    const { EmailRules, rolesData} = this.state
     const itemArr = [
-      { label: '用户名', name: 'user', render: <Input />, rules: [{ required: true, message: '用户名不能为空' }] },
-      { label: '密码', name: 'password', render: <Input.Password />, rules: [{ required: true, message: '密码不能为空' }] },
-      { label: '昵称', name: 'nikeName', render: <Input />,  },
-      { label: 'Email', name: 'email', render: <Form.Item name='email' noStyle rules={ EmailRules }><Input/></Form.Item>},
-      { label: '角色', name: 'role', render: <SearchSelect /> },
+      { label: '用户名', name: 'user', render: <Input />, rules: [{ required: true, message: '请输入您的用户名' }] },
+      { label: '密码', name: 'password', render: <Input.Password />, rules: [{ required: true, message: '请输入您的密码' }] },
+      { label: '昵称', name: 'nickName', render: <Input />,  },
+      { label: 'Email', name: 'email', render: <Form.Item label="Email" name='email' noStyle rules={ EmailRules }><Input /></Form.Item>},
+      { label: '角色', name: 'role', render: <SearchSelect data={rolesData} /> },
     ]
     return itemArr
   }
 
-  onFinish = (values) => {
-    console.log(values)
+  // 获取角色列表 
+  getRolesList = async () => {
+    const res = await APIgetRolesList()
+    if(res.code === 0) {
+      const rolesData = res.data.map(item => {
+        item.value = item.id
+        item.text = item.name
+        return item
+      })
+      this.setState({ rolesData })
+    }
+  }
+
+  onFinish = async (values) => {
+    let params = values
+    params.password = Utils.stringToMd5(params.password)
+    const res = await APIUserRegister(params)
+    console.log(res)
+    if(res.code === 0) {
+      message.info(res.msg)
+    }
   }
 
 }

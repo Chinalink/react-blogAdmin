@@ -2,9 +2,9 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-25 17:40:07
- * @LastEditTime: 2020-08-01 09:36:08
+ * @LastEditTime: 2020-08-08 17:16:25
  */ 
-
+import md5 from 'js-md5'
 class Utils {
   static arrToTreeData (arr, parentArr, idName = 'parrentId') {
     parentArr.map(pNode => {
@@ -23,6 +23,10 @@ class Utils {
       return pNode
     })
     return parentArr
+  }
+
+  static stringToMd5(value) {
+    return md5(value)
   }
 }
 

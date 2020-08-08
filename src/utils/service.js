@@ -2,7 +2,7 @@
  * @Description: axios 封装
  * @Author: HuGang
  * @Date: 2020-07-23 16:42:05
- * @LastEditTime: 2020-08-07 01:16:26
+ * @LastEditTime: 2020-08-08 17:22:39
  */ 
 import axios from 'axios'
 import Qs from 'qs'
@@ -21,7 +21,7 @@ const Axios = axios.create({
 Axios.interceptors.request.use(
   config => {
     // 若是有做鉴权token , 就给头部带上token
-    const token = localStorage.getItem('token')
+    const token = sessionStorage.getItem('token')
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
