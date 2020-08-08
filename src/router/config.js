@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:31:56
- * @LastEditTime: 2020-08-08 15:09:55
+ * @LastEditTime: 2020-08-08 21:42:20
  */ 
 import React from 'react';
 import { RenderRoutes } from './index'
@@ -23,7 +23,7 @@ const List = () => <h3>首页</h3>
 export const menus = [
   { path: '/index', title: '首页', component: List },
   {
-    path: '/article', title: '文章管理', component: RenderRoutes, subs: [
+    path: '/article', title: '文章管理', subs: [
       { path: '/article/list', title: '文章列表', component: ArticleList },
       { path: '/article/new', title: '新建文章', component: ArticleNew },
       { path: '/article/category', title: '分类目录', component: ArticleCategory },
@@ -31,14 +31,14 @@ export const menus = [
     ]
   },
   {
-    path: '/user', title: '用户管理', component: RenderRoutes, subs: [
+    path: '/user', title: '用户管理', subs: [
       { path: '/user/list', title: '用户列表', component: UserList },
       { path: '/user/new', title: '添加用户', component: UserNew },
       { path: '/user/info', title: '个人资料', component: UserInfo },
     ]
   },
   {
-    path: '/theme', title: '主题设置', component: RenderRoutes, 
+    path: '/theme', title: '主题设置', 
   },
 ]
 
