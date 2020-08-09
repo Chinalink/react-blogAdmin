@@ -2,11 +2,10 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:31:56
- * @LastEditTime: 2020-08-08 22:06:36
+ * @LastEditTime: 2020-08-08 22:45:38
  */ 
-import React from 'react';
-
 import Home from '../pages/Home/Home.js'
+import Index from '../pages/Index/Index.js'
 import Login from '../pages/Login/Login.js'
 
 import ArticleList from '../pages/Article/List/List.js'
@@ -17,10 +16,8 @@ import UserNew from '../pages/Users/New/New.js'
 import UserList from '../pages/Users/List/List.js'
 import UserInfo from '../pages/Users/Info/Info.js'
 
-const List = () => <h3>首页</h3>
-
 export const menus = [
-  { path: '/index', title: '首页', component: List },
+  { path: '/index', title: '首页', component: Index },
   {
     path: '/article', title: '文章管理', subs: [
       { path: '/article/list', title: '文章列表', component: ArticleList },
