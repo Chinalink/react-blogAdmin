@@ -2,7 +2,7 @@
  * @Description: 分类目录
  * @Author: HuGang
  * @Date: 2020-07-25 09:27:47
- * @LastEditTime: 2020-08-01 22:17:44
+ * @LastEditTime: 2020-08-09 16:59:00
  */ 
 import React, { Component } from 'react';
 // 依赖组件
@@ -139,14 +139,13 @@ class Category extends Component {
     this.setState({ isUpdate: false, modalVisible: false })
   }
 
-  // 校验表单项并提交
+  // 创建、更新分类
   handleSubmitCategory = async () => {
     const categoryFromData = await this.categoryFromRef.current.validateFields()
     const callBack = categoryFromData.id ? APIupdateCategory : APIcreateCategory
     this.actionCategory(categoryFromData, callBack)
   }
 
-  // 创建分类目录
   actionCategory = async (values, APIcallBack) => {
     const res = await APIcallBack(values)
     
@@ -164,6 +163,7 @@ class Category extends Component {
 
   // 编辑分类
   handleEditCategory = (text, record, index) => {
+    console.log(text);
     this.setState({isUpdate: true})
     console.log(record)
     const formData = Object.assign({}, record)

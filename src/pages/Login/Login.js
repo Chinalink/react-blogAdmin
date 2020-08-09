@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-05 23:07:16
- * @LastEditTime: 2020-08-08 18:28:46
+ * @LastEditTime: 2020-08-09 23:25:34
  */
 import React, { Component } from 'react';
 import { Form, Input, Button, Checkbox, message } from 'antd';
@@ -47,6 +47,7 @@ class Login extends Component {
       localStorage.setItem("user", values.user)
       localStorage.setItem("password", values.password)
       localStorage.setItem("remember", values.remember)
+      sessionStorage.setItem("userId", 2)
     } else {
       localStorage.clear();
     }

@@ -2,11 +2,14 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-02 19:01:33
- * @LastEditTime: 2020-08-08 17:31:17
+ * @LastEditTime: 2020-08-09 23:32:38
  */ 
 import React, { Component, Fragment } from 'react';
 import { Form, Input, Button, Upload, message } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+
+// 用户信息的获取更新
+import { APIgetUserInfo, APIupdateUserInfo} from '../../../apis/UserApis'
 
 import './style.css'
 
@@ -20,11 +23,12 @@ class UserInfo extends Component {
       ],
       loading: false
     }
+    this.userFromRef = React.createRef()
   }
 
   render() {
     const formItems = this.getFormItems()
-    const fromOptions = { labelCol:{ span: 4 }, onFinish:this.onFinish }
+    const fromOptions = { ref: this.userFromRef, labelCol:{ span: 4 }, onFinish:this.onFinish }
   
     return (
       <Fragment>
@@ -68,8 +72,8 @@ class UserInfo extends Component {
     };
     const itemArr = [
       { name: 'basicInfo', render: <h3>基本信息</h3> },
-      { label: '用户名', name: 'user', render: <Input disabled/>, rules: [{ required: true, message: '用户名不能为空' }]},
-      { label: '昵称', name: 'nikeName', render: <Input />},
+      { label: '用户名', name: 'user', render: <Input disabled />, rules: [{ required: true, message: '用户名不能为空' }]},
+      { label: '昵称', name: 'nickName', render: <Input />},
       { name: 'contactInfo', render: <h3>联系信息</h3> },
       { label: '邮箱', name: 'email', render: <Input />, rules: EmailRules },
       { label: 'QQ', name: 'qq', render: <Input />},
@@ -87,13 +91,13 @@ class UserInfo extends Component {
     return itemArr
   }
 
+  // 图片上传
   getBase64 = (img, callback) => {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result));
     reader.readAsDataURL(img);
   }
   handleChange = (info) => {
-    // console.log(info);
     if (info.file.status === 'uploading') {
       this.setState({ loading: true });
       return;
@@ -108,11 +112,50 @@ class UserInfo extends Component {
     }
   };
 
-  onFinish = (values) => {
+  componentDidMount() {
+    this.getUserInfo()
+  }
+
+  // 获取用户信息
+  getUserInfo = async () => {
+    const { location } = this.props
+    let params
+    if (location.state) {
+      params = { userId: location.state.userId }
+    } else {
+      params = { userId: sessionStorage.userId }
+    }
+    const res = await APIgetUserInfo(params)
+    if (res.code === 0) {
+      Object.keys(res.data).map((key) => {
+        if (res.data[key] == null) {
+          res.data[key] = ''
+        }
+      })
+      // const formData = Object.assign({}, res.data)
+      setTimeout(() => {
+        this.userFromRef.current.setFieldsValue(res.data)
+      }, 50)
+    }
+  }
+  
+  // 更新用户资料
+  onFinish = async (values) => {
+    const { history, location } = this.props
+
     delete values.basicInfo
     delete values.contactInfo
     delete values.aboutYou
-    console.log(values)
+    
+    if (location.state) {
+      values.userId = location.state.userId
+    } else {
+      values.userId = sessionStorage.userId
+    }
+    const res = await APIupdateUserInfo(values)
+    if (res.code === 0) {
+      history.push({ pathname: '/user/list' })
+    }
   }
 
 }

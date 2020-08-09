@@ -2,7 +2,7 @@
  * @Description: axios 封装
  * @Author: HuGang
  * @Date: 2020-07-23 16:42:05
- * @LastEditTime: 2020-08-08 21:58:49
+ * @LastEditTime: 2020-08-09 19:12:53
  */ 
 import axios from 'axios'
 import Qs from 'qs'
@@ -50,7 +50,7 @@ Axios.interceptors.response.use(
     if(error && error.response) {
       const errorMsg = (error.response.data && error.response.data.msg) || '网络请求错误'
       message.warning(errorMsg)
-      if(error.response.status === 401 && error.response.data.code === 1004) {
+      if(error.response.status === 401 && error.response.data.code === 1002) {
         history.push({ pathname: '/login'})
       }
     } else {

@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-02 17:18:45
- * @LastEditTime: 2020-08-09 00:22:04
+ * @LastEditTime: 2020-08-09 19:37:43
  */ 
 import React, { Component, Fragment } from 'react';
 // 依赖组件
@@ -20,6 +20,7 @@ class UserList extends Component {
       userData: []
     }
     this.serchFrom = React.createRef()
+    this.categoryFromRef = React.createRef()
   }
   render() { 
     const { userData } = this.state
@@ -50,16 +51,17 @@ class UserList extends Component {
       { key: 'user', title: '用户名', dataIndex: 'user' },
       { key: 'author', title: '昵称', dataIndex: 'nickName' },
       { key: 'email', title: '电子邮件', dataIndex: 'email' },
-      { key: 'rols', title: '角色', dataIndex: 'roles' },
+      { key: 'role', title: '角色', dataIndex: ['role', 'roleName'] },
       { key: 'createdAt', title: '注册时间', dataIndex: 'createdAt' },
-      // {
-      //   key: 'action', title: '操作', dataIndex: 'action', render: (text, record, index) => (
-      //     <div className="table-action">
-      //       <Button className="table-action__button" type="primary" size="small" onClick={this.handleEditArticle.bind(this, text, record, index)}>编辑</Button>
-      //       <Button className="table-action__button" type="primary" size="small" danger onClick={this.handleRemoveArticle.bind(this, text, record, index)}>删除</Button>
-      //     </div>
-      //   )
-      // }
+      { key: 'articleTotal', title: '文章总数', dataIndex: 'articleTotal' },
+      {
+        key: 'action', title: '操作', dataIndex: 'action', render: (text, record, index) => (
+          <div className="table-action">
+            <Button className="table-action__button" type="primary" size="small" onClick={this.handleEditUser.bind(this, text, record, index)}>编辑</Button>
+            {/* <Button className="table-action__button" type="primary" size="small" danger onClick={this.handleRemoveUser.bind(this, text, record, index)}>删除</Button> */}
+          </div>
+        )
+      }
     ]
     return columns
   }
@@ -73,6 +75,16 @@ class UserList extends Component {
     const userData = res.data
     this.setState({ userData })
   }
+  // 编辑用户
+  handleEditUser = (text, record, index) => {
+    const { history } = this.props
+    history.push({ pathname: '/user/info', state: {userId: record.id} })}
+
+  // 删除用户
+  // handleRemoveUser = (text, record, index) => {
+  //   const params = { id: record.id }
+  //   // this.actionCategory(params, APIdeleteCategory)
+  // }
 }
  
 export default UserList;
