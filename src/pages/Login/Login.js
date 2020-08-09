@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-05 23:07:16
- * @LastEditTime: 2020-08-08 17:28:18
+ * @LastEditTime: 2020-08-08 18:28:46
  */
 import React, { Component } from 'react';
 import { Form, Input, Button, Checkbox, message } from 'antd';
@@ -39,12 +39,14 @@ class Login extends Component {
     );
   }
   onFinish = (values) => {
-    values.password = Utils.stringToMd5(values.password)
+    if (localStorage.secret !== 'once') {
+      values.password = Utils.stringToMd5(values.password)
+    }
     if (values.remember === true) {
-      console.log('记住密码');
+      localStorage.setItem("secret", 'once')
       localStorage.setItem("user", values.user)
       localStorage.setItem("password", values.password)
-      localStorage.setItem("remember", values.true)
+      localStorage.setItem("remember", values.remember)
     } else {
       localStorage.clear();
     }
@@ -52,7 +54,7 @@ class Login extends Component {
   }
 
   componentDidMount() {
-    if (localStorage.length !== 0) {
+    if (localStorage.user) {
       console.log(localStorage.user);
     }
   }

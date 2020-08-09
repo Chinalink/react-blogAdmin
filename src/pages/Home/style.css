@@ -19,6 +19,9 @@
 
 .home-main .home-main__header {
   padding: 0;
+  padding-right: 32px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .logo {
@@ -37,6 +40,9 @@
 
 .home-main__header .trigger:hover {
   color: #1890ff;
+}
+.home-main__header .home-avatar{
+  margin-right: 8px;
 }
 
 .home-main__wrap {

@@ -2,15 +2,16 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:31:56
- * @LastEditTime: 2020-08-08 22:45:38
+ * @LastEditTime: 2020-08-09 14:24:56
  */ 
 import Home from '../pages/Home/Home.js'
 import Index from '../pages/Index/Index.js'
 import Login from '../pages/Login/Login.js'
 
+import ArticleCategory from '../pages/Article/Category/Category.js'
 import ArticleList from '../pages/Article/List/List.js'
 import ArticleNew from '../pages/Article/New/New.js'
-import ArticleCategory from '../pages/Article/Category/Category.js'
+import ArticleTag from '../pages/Article/Tag/Tag.js'
 
 import UserNew from '../pages/Users/New/New.js'
 import UserList from '../pages/Users/List/List.js'
@@ -23,7 +24,7 @@ export const menus = [
       { path: '/article/list', title: '文章列表', component: ArticleList },
       { path: '/article/new', title: '新建文章', component: ArticleNew },
       { path: '/article/category', title: '分类目录', component: ArticleCategory },
-      { path: '/article/tag', title: '标签', component: UserList }
+      { path: '/article/tag', title: '标签', component: ArticleTag }
     ]
   },
   {
