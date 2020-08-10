@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:01:15
- * @LastEditTime: 2020-08-02 18:32:53
+ * @LastEditTime: 2020-08-11 00:50:47
  */ 
 import React, { Component, Fragment } from 'react';
 // 依赖组件
@@ -19,7 +19,11 @@ class ArticleList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      articleList: []
+      articleList: [],
+      pagination: {
+        current: 1,
+        pageSize: 10
+      } 
     }
     this.serchFrom = React.createRef()
   }
@@ -29,11 +33,10 @@ class ArticleList extends Component {
   }
   
   render() {
-    const { articleList } = this.state
+    const { articleList, pagination } = this.state
     const columns = this.getTableColumns()
-    const formOptions = { ref: this.serchFrom, name: 'article_list_search', onFinish: this.serchArticleList }
+    const formOptions = { ref: this.serchFrom, name: 'article_list_search', onFinish: this.serchArticleList, pagination }
     const formItems = this.getFormItems()
-    // const data = [{ key: '1', title: '世界，您好！', author: 'xiaodai', category: '未分类', tags: '—' }]
 
     return (
       <Fragment>
@@ -90,13 +93,16 @@ class ArticleList extends Component {
   }
 
   getAllArticleList = async () => {
-    const res = await APIgetArticleList()
-    if(res.code === 1) {
-      const data = res.data.map(item => {
+    const { pagination } = this.state
+    const res = await APIgetArticleList({ ...pagination })
+    if(res.code === 0) {
+      const {result, total} = res.data
+      const data = result.map(item => {
         item.key = item.id
         return item
-      })
-      this.setState({ articleList: data })
+      }) 
+      console.log(data)
+      this.setState({ articleList: data, pagination: { ...pagination, total} })
     }
   }
 
