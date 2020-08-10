@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-02 19:01:33
- * @LastEditTime: 2020-08-08 15:34:04
+ * @LastEditTime: 2020-08-10 21:50:14
  */ 
 import React, { Component, Fragment } from 'react';
 import { Form, Input, Button, message } from 'antd';
@@ -17,6 +17,11 @@ class UserNew extends Component {
     super(props);
     this.state = {
       rolesData: [], // 角色列表
+      passwordRules: [
+        { required: true, message: '请输入密码' },
+        { max: 18, message: '密码不超过18个字符' },
+        { pattern: new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,18}$/), message: '密码只允许包含数字、字母和下划线' }
+      ],
       EmailRules: [
         { type: 'email', message: '您输入的邮箱格式不正确！' },
         { required: true, message: '请输入您的邮箱！' },
@@ -49,10 +54,10 @@ class UserNew extends Component {
   }
 
   getFormItems = () => {
-    const { EmailRules, rolesData} = this.state
+    const { EmailRules, passwordRules, rolesData} = this.state
     const itemArr = [
-      { label: '用户名', name: 'user', render: <Input />, rules: [{ required: true, message: '请输入您的用户名' }] },
-      { label: '密码', name: 'password', render: <Input.Password />, rules: [{ required: true, message: '请输入您的密码' }] },
+      { label: '用户名', name: 'user', render: <Input maxLength='10'/>, rules: [{ required: true, message: '请输入您的用户名' }] },
+      { label: '密码', name: 'password', render: <Input.Password />, rules: passwordRules },
       { label: '昵称', name: 'nickName', render: <Input />,  },
       { label: 'Email', name: 'email', render: <Form.Item label="Email" name='email' noStyle rules={ EmailRules }><Input /></Form.Item>},
       { label: '角色', name: 'role', render: <SearchSelect data={rolesData} /> },

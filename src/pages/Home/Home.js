@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:01:04
- * @LastEditTime: 2020-08-09 01:00:15
+ * @LastEditTime: 2020-08-11 00:31:06
  */ 
 // lib
 import React, { Component } from 'react';
@@ -24,9 +24,9 @@ class Home extends Component {
     this.state = {
       collapsed: false,
       menuData: [
-        { text: '编辑我的个人资料', key: 'edit' },
+        { text: '个人资料', key: 'edit', icon: 'SettingOutlined' },
         { divider: true },
-        { text: '退出登录', key: 'loginOut' }
+        { text: '退出登录', key: 'loginOut', icon: 'LogoutOutlined' }
       ]
     }
   }
@@ -40,7 +40,7 @@ class Home extends Component {
         <Layout className="home-layout">
           <Sider collapsed={collapsed} routes={routes} />
           <Layout className="home-main">
-            <Header collapsed={collapsed} handlerToggle={this.toggle} menuData={menuData} handlerMenu={this.handlerMenu} />
+            <Header collapsed={collapsed} handlerToggle={this.toggle} menuData={menuData} handlerMenu={this.handlerMenu} userInfo={JSON.parse(localStorage.userInfo)} />
             <div className="home-main__wrap">
               <Breadcrumb routes={routes} />
               <Content className="home-main__content">
@@ -59,12 +59,13 @@ class Home extends Component {
     });
   }
 
+  
   handlerMenu = ({ key }) => {
     const { history } = this.props
 
     switch (key) {
       case 'edit':
-        history.push({ pathname: '/user/info' })
+        history.push({ pathname: '/user/info', state: { userId: JSON.parse(localStorage.userInfo).uid} })
         break;
       case 'loginOut':
         sessionStorage.clear()

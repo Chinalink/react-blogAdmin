@@ -4,6 +4,11 @@
   width: 100%;
   min-height: 100%;
 }
+.logo {
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px;
+}
 
 .home-layout {
   flex-direction: row;
@@ -22,17 +27,13 @@
   padding-right: 32px;
   display: flex;
   justify-content: space-between;
+  height: 48px;
 }
 
-.logo {
-  height: 32px;
-  background: rgba(255, 255, 255, 0.2);
-  margin: 16px;
-}
 
 .home-main__header .trigger {
   font-size: 18px;
-  line-height: 64px;
+  line-height: 48px;
   padding: 0 16px;
   cursor: pointer;
   transition: color 0.3s;
@@ -42,7 +43,24 @@
   color: #1890ff;
 }
 .home-main__header .home-avatar{
-  margin-right: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+}
+
+/* 右侧头像区域 */
+.home-main__header .ant-dropdown-trigger{
+  padding:  0 12px;
+  display: flex;
+  align-items: center;
+}
+.home-main__header .ant-dropdown-trigger:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+.home-main__header .home-user-name{
+  margin-left: 8px;
+  line-height: 48px;
 }
 
 .home-main__wrap {

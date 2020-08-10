@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-02 19:01:33
- * @LastEditTime: 2020-08-09 23:32:38
+ * @LastEditTime: 2020-08-11 00:55:57
  */ 
 import React, { Component, Fragment } from 'react';
 import { Form, Input, Button, Upload, message } from 'antd';
@@ -123,7 +123,7 @@ class UserInfo extends Component {
     if (location.state) {
       params = { userId: location.state.userId }
     } else {
-      params = { userId: sessionStorage.userId }
+      params = { userId: JSON.parse(localStorage.userInfo).uid }
     }
     const res = await APIgetUserInfo(params)
     if (res.code === 0) {
@@ -150,7 +150,7 @@ class UserInfo extends Component {
     if (location.state) {
       values.userId = location.state.userId
     } else {
-      values.userId = sessionStorage.userId
+      values.userId = JSON.parse(localStorage.userInfo).uid
     }
     const res = await APIupdateUserInfo(values)
     if (res.code === 0) {

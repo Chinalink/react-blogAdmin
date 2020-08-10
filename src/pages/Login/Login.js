@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-05 23:07:16
- * @LastEditTime: 2020-08-10 17:59:25
+ * @LastEditTime: 2020-08-10 23:54:45
  */
 import React, { Component } from 'react';
 import { Form, Input, Button, Checkbox, message } from 'antd';
@@ -19,7 +19,7 @@ class Login extends Component {
   }
 
   render() {
-    const fromOptions = { labelCol: { span: 4 }, onFinish: this.onFinish, initialValues: { user: localStorage.user, password: localStorage.password, remember: localStorage.remember } }
+    const fromOptions = { labelCol: { span: 4 }, onFinish: this.onFinish, initialValues: JSON.parse(localStorage.loginInfo)}
     return (
       <Form className="user-login-form" {...fromOptions}>
         <Form.Item name="user" rules={[{required: true,message: 'Please input your Username!'}]} >
@@ -43,11 +43,8 @@ class Login extends Component {
       values.password = Utils.stringToMd5(values.password)
     }
     if (values.remember === true) {
-      localStorage.setItem("secret", 'once')
-      localStorage.setItem("user", values.user)
-      localStorage.setItem("password", values.password)
-      localStorage.setItem("remember", values.remember)
-      sessionStorage.setItem("userId", 2)
+      localStorage.setItem('secret', 'once')
+      localStorage.setItem('loginInfo', JSON.stringify(values))
     } else {
       localStorage.clear();
     }
@@ -65,6 +62,12 @@ class Login extends Component {
     const res = await APIUserLogin(params)
     if(res.code === 0) {
       const token = res.data.token
+      const obj = {
+        avatar: res.data.avatar,
+        name: res.data.name,
+        uid: res.data.uid
+      }
+      localStorage.setItem('userInfo', JSON.stringify(obj))
       sessionStorage.setItem('token', token)
       message.info(res.msg)
       setTimeout(() => {
