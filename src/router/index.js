@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 19:55:16
- * @LastEditTime: 2020-08-08 21:54:26
+ * @LastEditTime: 2020-08-10 19:21:08
  */ 
 import React from 'react';
 import {Route} from 'react-router-dom'
@@ -24,7 +24,13 @@ export const RouteWithSubRoutes = (route) => {
       <Route
         path={route.path}
         exact={route.exact}
-        render={(props) => (<route.component {...props} routes={route.subs} />)}
+        render={(props) => {
+          if(!route.subs) {
+            document.title = `${route.title} - 呆呆萌萌Blog管理系统` || '呆呆萌萌Blog管理系统'
+            return <route.component {...props} routes={route.subs} />
+          }
+          return <route.component {...props} routes={route.subs} />
+        }}
       />
     )
   }
