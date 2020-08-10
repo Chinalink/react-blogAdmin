@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:31:56
- * @LastEditTime: 2020-08-09 14:24:56
+ * @LastEditTime: 2020-08-10 18:14:12
  */ 
 import Home from '../pages/Home/Home.js'
 import Index from '../pages/Index/Index.js'
@@ -18,9 +18,9 @@ import UserList from '../pages/Users/List/List.js'
 import UserInfo from '../pages/Users/Info/Info.js'
 
 export const menus = [
-  { path: '/index', title: '首页', component: Index },
+  { path: '/', exact: true, title: '首页', icon: 'HomeOutlined', component: Index },
   {
-    path: '/article', title: '文章管理', subs: [
+    path: '/article', title: '文章管理', icon: 'ProfileOutlined', subs: [
       { path: '/article/list', title: '文章列表', component: ArticleList },
       { path: '/article/new', title: '新建文章', component: ArticleNew },
       { path: '/article/category', title: '分类目录', component: ArticleCategory },
@@ -28,14 +28,14 @@ export const menus = [
     ]
   },
   {
-    path: '/user', title: '用户管理', subs: [
+    path: '/user', title: '用户管理', icon: 'TeamOutlined', subs: [
       { path: '/user/list', title: '用户列表', component: UserList },
       { path: '/user/new', title: '添加用户', component: UserNew },
       { path: '/user/info', title: '个人资料', component: UserInfo },
     ]
   },
   {
-    path: '/theme', title: '主题设置', 
+    path: '/theme', title: '主题设置', icon: 'AppstoreOutlined',
   },
 ]
 

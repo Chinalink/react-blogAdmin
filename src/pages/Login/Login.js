@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-05 23:07:16
- * @LastEditTime: 2020-08-09 23:25:34
+ * @LastEditTime: 2020-08-10 17:59:25
  */
 import React, { Component } from 'react';
 import { Form, Input, Button, Checkbox, message } from 'antd';
@@ -68,7 +68,7 @@ class Login extends Component {
       sessionStorage.setItem('token', token)
       message.info(res.msg)
       setTimeout(() => {
-        history.push({ pathname: '/index' })
+        history.push({ pathname: '/' })
       }, 1000)
     }
   }

@@ -2,7 +2,7 @@
  * @Description: 面包屑导航
  * @Author: HuGang
  * @Date: 2020-07-14 13:33:55
- * @LastEditTime: 2020-08-08 22:15:04
+ * @LastEditTime: 2020-08-10 18:06:54
  */ 
 import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom'
@@ -14,7 +14,7 @@ class LayoutBreadcrumb extends Component {
   render() {
     return (
       <Breadcrumb className="home-main_breadcrumb">
-        <Breadcrumb.Item key='/'><Link to='/index'>首页</Link></Breadcrumb.Item>
+        <Breadcrumb.Item key='/'><Link to='/'>首页</Link></Breadcrumb.Item>
         {this.renderCrumbListXml()}
       </Breadcrumb>
     );
@@ -30,7 +30,7 @@ class LayoutBreadcrumb extends Component {
     const crumbList = pathArr.map((crumb, index) => {
       const url = `/${pathArr.slice(0, index + 1).join('/')}`
       const name = breadCrumbRoutes.find(item => item.path === url).title
-      if(url !== '/index') {
+      if(url !== '/') {
         return (
           <Breadcrumb.Item key={url}>{name}</Breadcrumb.Item>
         )
