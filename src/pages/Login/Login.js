@@ -2,30 +2,31 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-05 23:07:16
- * @LastEditTime: 2020-08-10 23:54:45
+ * @LastEditTime: 2020-08-11 23:27:15
  */
 import React, { Component } from 'react';
 import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { APIUserLogin } from '../../apis/UserApis'
-import Utils from '../../utils/utils'
+import utils from '../../utils/utils'
 
 import './style.css'
 
 class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = {  }
+    const loginInfo = utils.localGetItem('loginInfo')
+    this.loginInfo = loginInfo ? JSON.parse(loginInfo) : {}
   }
 
   render() {
-    const fromOptions = { labelCol: { span: 4 }, onFinish: this.onFinish, initialValues: JSON.parse(localStorage.loginInfo)}
+    const fromOptions = { labelCol: { span: 4 }, onFinish: this.onFinish, initialValues: this.loginInfo}
     return (
       <Form className="user-login-form" {...fromOptions}>
-        <Form.Item name="user" rules={[{required: true,message: 'Please input your Username!'}]} >
+        <Form.Item name="user" rules={[{ required: true, message: '请输入用户名或邮箱'}]} >
           <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="请输入用户名或邮箱"/>
         </Form.Item>
-        <Form.Item name="password" rules={[ { required: true, message: 'Please input your Password!', }]}>
+        <Form.Item name="password" rules={[{ required: true, message: '请输入密码', }]}>
           <Input prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="请输入密码" />
         </Form.Item>
         <Form.Item>
@@ -38,24 +39,21 @@ class Login extends Component {
       </Form>
     );
   }
+
   onFinish = (values) => {
-    if (localStorage.secret !== 'once') {
-      values.password = Utils.stringToMd5(values.password)
+    const isFirstLogin = utils.localGetItem('secret')
+    if (isFirstLogin !== 'once') {
+      values.password = utils.stringToMd5(values.password)
     }
     if (values.remember === true) {
-      localStorage.setItem('secret', 'once')
-      localStorage.setItem('loginInfo', JSON.stringify(values))
+      utils.localGetItem('secret', 'once')
+      utils.localGetItem('loginInfo', JSON.stringify(values))
     } else {
-      localStorage.clear();
+      utils.localClearItem();
     }
     this.submitLogin(values)
   }
 
-  componentDidMount() {
-    if (localStorage.user) {
-      console.log(localStorage.user);
-    }
-  }
   submitLogin = async (values) => {
     const { history } = this.props
     const params = values
@@ -67,8 +65,8 @@ class Login extends Component {
         name: res.data.name,
         uid: res.data.uid
       }
-      localStorage.setItem('userInfo', JSON.stringify(obj))
-      sessionStorage.setItem('token', token)
+      utils.localGetItem('userInfo', JSON.stringify(obj))
+      utils.sessionSetItem('token', token)
       message.info(res.msg)
       setTimeout(() => {
         history.push({ pathname: '/' })
