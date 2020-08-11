@@ -14,7 +14,7 @@ import SerchForm from '../../../components/Common/SearchForm/SearchForm.js'
 import SearchSelect from '../../../components/Common/SearchSelect/SearchSelect.js'
 
 // 依赖工具 & API
-import Utils from '../../../utils/utils'
+import utils from '../../../utils/utils'
 import { APIcreatePost, APIgetCategoryList } from '../../../apis/ArticleApis'
 
 import 'easymde/dist/easymde.min.css';
@@ -104,7 +104,7 @@ class ArticleNew extends Component {
       })
       // 数据格式转换
       const parentArr = result.filter(i => i.parentId == null)
-      const categoryTreeData = Utils.arrToTreeData(result, parentArr, 'parentId')
+      const categoryTreeData = utils.arrToTreeData(result, parentArr, 'parentId')
       this.setState({ categoryTreeData })
     }
   }

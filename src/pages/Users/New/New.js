@@ -7,7 +7,7 @@
 import React, { Component, Fragment } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import SearchSelect from '../../../components/Common/SearchSelect/SearchSelect.js'
-import Utils from '../../../utils/utils'
+import utils from '../../../utils/utils'
 import { APIgetRolesList, APIUserRegister } from '../../../apis/UserApis'
 
 import './style.css'
@@ -80,7 +80,7 @@ class UserNew extends Component {
 
   onFinish = async (values) => {
     let params = values
-    params.password = Utils.stringToMd5(params.password)
+    params.password = utils.stringToMd5(params.password)
     const res = await APIUserRegister(params)
     console.log(res)
     if(res.code === 0) {

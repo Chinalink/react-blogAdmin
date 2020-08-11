@@ -8,7 +8,7 @@ import React, { Component } from 'react';
 // 依赖组件
 import { Row, Col, Button, Input, TreeSelect, Table, Form, message, Modal, Popconfirm } from 'antd';
 // 依赖工具 & API
-import Utils from '../../../utils/utils'
+import utils from '../../../utils/utils'
 import { APIcreateCategory, APIupdateCategory, APIdeleteCategory, APIgetCategoryList } from '../../../apis/ArticleApis'
 
 class Category extends Component {
@@ -123,7 +123,7 @@ class Category extends Component {
       })
       // 数据格式转换
       const parentArr = result.filter(i => i.parentId == null)
-      const categoryData = Utils.arrToTreeData(result, parentArr, 'parentId')
+      const categoryData = utils.arrToTreeData(result, parentArr, 'parentId')
       const categoryTreeData = this.state.categoryTreeData.concat(categoryData)
       this.setState({ categoryData, categoryTreeData, tableLoading: false})
     }
