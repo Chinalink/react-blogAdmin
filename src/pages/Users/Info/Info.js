@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-02 19:01:33
- * @LastEditTime: 2020-08-11 00:55:57
+ * @LastEditTime: 2020-08-11 23:33:48
  */ 
 import React, { Component, Fragment } from 'react';
 import { Form, Input, Button, Upload, message } from 'antd';
@@ -130,6 +130,7 @@ class UserInfo extends Component {
       Object.keys(res.data).map((key) => {
         if (res.data[key] == null) {
           res.data[key] = ''
+          return key
         }
       })
       // const formData = Object.assign({}, res.data)

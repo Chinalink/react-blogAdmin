@@ -30,6 +30,10 @@
   height: 48px;
 }
 
+.home-main .home-main__header .user-info {
+  cursor: pointer;
+}
+
 
 .home-main__header .trigger {
   font-size: 18px;

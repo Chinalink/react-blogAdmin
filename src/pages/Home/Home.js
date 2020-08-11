@@ -2,16 +2,18 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:01:04
- * @LastEditTime: 2020-08-12 00:03:04
+ * @LastEditTime: 2020-08-12 00:24:36
  */ 
 // lib
 import React, { Component } from 'react';
 import { Layout } from 'antd';
+import utils from '../../utils/utils'
 
 // component
 import Sider from '../../components/Layout/Sider/Sider.js'
 import Header from '../../components/Layout/Header/Header.js'
 import Breadcrumb from '../../components/Layout/Breadcrumb/Breadcrumb.js'
+
 
 import { renderRoutes } from '../../router';
 import './style.css'
@@ -65,7 +67,8 @@ class Home extends Component {
 
     switch (key) {
       case 'edit':
-        history.push({ pathname: '/user/info', state: { userId: JSON.parse(localStorage.userInfo).uid} })
+        const userInfo = utils.sessionGetItem('userInfo')
+        history.push({ pathname: '/user/info', state: { userId: JSON.parse(userInfo).uid} })
         break;
       case 'loginOut':
         sessionStorage.clear()
