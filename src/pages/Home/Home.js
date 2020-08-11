@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:01:04
- * @LastEditTime: 2020-08-11 00:31:06
+ * @LastEditTime: 2020-08-12 00:03:04
  */ 
 // lib
 import React, { Component } from 'react';
@@ -40,7 +40,7 @@ class Home extends Component {
         <Layout className="home-layout">
           <Sider collapsed={collapsed} routes={routes} />
           <Layout className="home-main">
-            <Header collapsed={collapsed} handlerToggle={this.toggle} menuData={menuData} handlerMenu={this.handlerMenu} userInfo={JSON.parse(localStorage.userInfo)} />
+            <Header collapsed={collapsed} handlerToggle={this.toggle} menuData={menuData} handlerMenu={this.handlerMenu} userInfo={JSON.parse(sessionStorage.userInfo)} />
             <div className="home-main__wrap">
               <Breadcrumb routes={routes} />
               <Content className="home-main__content">

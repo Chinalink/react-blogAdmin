@@ -2,20 +2,18 @@
  * @Description: 顶栏
  * @Author: HuGang
  * @Date: 2020-07-12 00:21:45
- * @LastEditTime: 2020-08-11 00:37:25
+ * @LastEditTime: 2020-08-12 00:07:31
  */ 
 import React from 'react';
 import { Layout } from 'antd'
-import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import { Avatar, Menu, Dropdown } from 'antd';
 import * as Icon from '@ant-design/icons';
-import { UserOutlined } from '@ant-design/icons';
 
 const { Header } = Layout;
 
 function LayoutHeader(props) {
   const { collapsed, handlerToggle, menuData, handlerMenu, userInfo } = props
-  const iconMenu = collapsed ? MenuUnfoldOutlined : MenuFoldOutlined
+  const iconMenu = collapsed ? 'MenuUnfoldOutlined' : 'MenuFoldOutlined'
   const UserAvatar = React.createElement(Icon['UserOutlined'])
 
   const menu = () => {
@@ -36,7 +34,7 @@ function LayoutHeader(props) {
 
   return (
     <Header className="home-main__header">
-      { React.createElement(iconMenu, { className: 'trigger', onClick: handlerToggle }) }
+      { React.createElement(Icon[iconMenu], { className: 'trigger', onClick: handlerToggle }) }
       <Dropdown overlay={menu}>
         <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
           {

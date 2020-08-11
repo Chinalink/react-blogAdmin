@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-05 23:07:16
- * @LastEditTime: 2020-08-11 23:27:15
+ * @LastEditTime: 2020-08-12 00:04:08
  */
 import React, { Component } from 'react';
 import { Form, Input, Button, Checkbox, message } from 'antd';
@@ -20,7 +20,7 @@ class Login extends Component {
   }
 
   render() {
-    const fromOptions = { labelCol: { span: 4 }, onFinish: this.onFinish, initialValues: this.loginInfo}
+    const fromOptions = { labelCol: { span: 4 }, onFinish: this.submitLogin, initialValues: this.loginInfo}
     return (
       <Form className="user-login-form" {...fromOptions}>
         <Form.Item name="user" rules={[{ required: true, message: '请输入用户名或邮箱'}]} >
@@ -40,32 +40,31 @@ class Login extends Component {
     );
   }
 
-  onFinish = (values) => {
-    const isFirstLogin = utils.localGetItem('secret')
-    if (isFirstLogin !== 'once') {
-      values.password = utils.stringToMd5(values.password)
-    }
-    if (values.remember === true) {
-      utils.localGetItem('secret', 'once')
-      utils.localGetItem('loginInfo', JSON.stringify(values))
-    } else {
-      utils.localClearItem();
-    }
-    this.submitLogin(values)
-  }
-
   submitLogin = async (values) => {
     const { history } = this.props
     const params = values
+    // 判断是否首次登录
+    const isFirstLogin = utils.localGetItem('secret')
+    if (isFirstLogin !== 'once') {
+      params.password = utils.stringToMd5(params.password)
+    }
+
     const res = await APIUserLogin(params)
+
     if(res.code === 0) {
       const token = res.data.token
-      const obj = {
+      const userInfo = {
         avatar: res.data.avatar,
         name: res.data.name,
         uid: res.data.uid
       }
-      utils.localGetItem('userInfo', JSON.stringify(obj))
+      if (values.remember === true) {
+        utils.localSetItem('secret', 'once')
+        utils.localSetItem('loginInfo', JSON.stringify(params))
+      } else {
+        utils.localClearItem();
+      }
+      utils.sessionSetItem('userInfo', JSON.stringify(userInfo))
       utils.sessionSetItem('token', token)
       message.info(res.msg)
       setTimeout(() => {
