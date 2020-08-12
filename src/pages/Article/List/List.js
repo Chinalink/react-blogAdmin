@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:01:15
- * @LastEditTime: 2020-08-12 20:57:00
+ * @LastEditTime: 2020-08-12 21:15:34
  */ 
 import React, { Component, Fragment } from 'react';
 // 依赖组件
@@ -23,7 +23,8 @@ class ArticleList extends Component {
       pagination: {
         current: 1,
         pageSize: 10,
-        showSizeChanger: true
+        showSizeChanger: true,
+        showTotal: (total) => `共 ${total} 条`
       } 
     }
     this.serchFrom = React.createRef()
@@ -64,11 +65,11 @@ class ArticleList extends Component {
   // 表格列配置
   getTableColumns = () => {
     const columns = [
-      { key: 'title', title: '标题', dataIndex: 'title',  render: (text, record, index) => (
-        [
-          <span className="article-table__title">{record.title}</span>, 
+      { key: 'title', title: '标题', dataIndex: 'title', render: (text, record, index) => (
+        <Fragment>
+          <span className="article-table__title">{record.title}</span>
           <Tag color={`${record.status ? '#2db7f5' : '#87d068'}`}>{record.status ? '已发布' : '草稿'}</Tag>
-        ]
+        </Fragment>
       )},
       { key: 'author', title: '作者', dataIndex: 'author' },
       { key: 'sorts', title: '分类目录', dataIndex: 'sorts', render: (text, record, index) => (
@@ -83,7 +84,7 @@ class ArticleList extends Component {
       { key: 'tags', title: '标签', dataIndex: 'tags' },
       { key: 'updatedAt', title: '最后修改日期', dataIndex: 'updatedAt' },
       {
-        key: 'action', title: '操作', dataIndex: 'action', render: (text, record, index) => (
+        key: 'action', title: '操作', render: (text, record, index) => (
         <div className="table-action">
           <Button className="table-action__button" type="primary" size="small" onClick={this.handlePreviewArticle.bind(this, text, record, index)}>查看</Button>
             <Button className="table-action__button" type="primary" size="small" onClick={this.handleEditArticle.bind(this, text, record, index)}>编辑</Button>
