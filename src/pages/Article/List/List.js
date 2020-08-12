@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:01:15
- * @LastEditTime: 2020-08-11 00:50:47
+ * @LastEditTime: 2020-08-12 20:57:00
  */ 
 import React, { Component, Fragment } from 'react';
 // 依赖组件
@@ -22,26 +22,28 @@ class ArticleList extends Component {
       articleList: [],
       pagination: {
         current: 1,
-        pageSize: 10
+        pageSize: 10,
+        showSizeChanger: true
       } 
     }
     this.serchFrom = React.createRef()
   }
 
   componentDidMount() {
-    this.getAllArticleList()
+    const { pagination } = this.state
+    this.getAllArticleList({ ...pagination })
   }
   
   render() {
     const { articleList, pagination } = this.state
     const columns = this.getTableColumns()
-    const formOptions = { ref: this.serchFrom, name: 'article_list_search', onFinish: this.serchArticleList, pagination }
+    const formOptions = { ref: this.serchFrom, name: 'article_list_search', onFinish: this.serchArticleList }
     const formItems = this.getFormItems()
 
     return (
       <Fragment>
         <SerchForm formOptions={formOptions} formItems={formItems} />
-        <Table bordered columns={columns} dataSource={articleList} size="middle" className="article-table" />
+        <Table bordered columns={columns} dataSource={articleList} pagination={pagination} size="middle" className="article-table" onChange={this.handleTableChange} />
       </Fragment>
     );
   }
@@ -62,7 +64,7 @@ class ArticleList extends Component {
   // 表格列配置
   getTableColumns = () => {
     const columns = [
-      { key: 'title', title: '标题', dataIndex: 'title', render: (text, record, index) => (
+      { key: 'title', title: '标题', dataIndex: 'title',  render: (text, record, index) => (
         [
           <span className="article-table__title">{record.title}</span>, 
           <Tag color={`${record.status ? '#2db7f5' : '#87d068'}`}>{record.status ? '已发布' : '草稿'}</Tag>
@@ -92,18 +94,20 @@ class ArticleList extends Component {
     return columns
   }
 
-  getAllArticleList = async () => {
-    const { pagination } = this.state
-    const res = await APIgetArticleList({ ...pagination })
+  getAllArticleList = async (params = {}) => {
+    const res = await APIgetArticleList(params)
     if(res.code === 0) {
       const {result, total} = res.data
       const data = result.map(item => {
         item.key = item.id
         return item
       }) 
-      console.log(data)
-      this.setState({ articleList: data, pagination: { ...pagination, total} })
+      this.setState({ articleList: data, pagination: { ...params, total} })
     }
+  }
+
+  handleTableChange = (pagination) => {
+    this.getAllArticleList({ ...pagination })
   }
 
   serchArticleList = async values => {
