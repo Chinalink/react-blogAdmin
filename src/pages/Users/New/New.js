@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-02 19:01:33
- * @LastEditTime: 2020-08-10 21:50:14
+ * @LastEditTime: 2020-08-12 20:04:28
  */ 
 import React, { Component, Fragment } from 'react';
 import { Form, Input, Button, message } from 'antd';
@@ -23,7 +23,7 @@ class UserNew extends Component {
         { pattern: new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,18}$/), message: '密码只允许包含数字、字母和下划线' }
       ],
       EmailRules: [
-        { type: 'email', message: '您输入的邮箱格式不正确！' },
+        { type: 'email', pattern: new RegExp(/^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/), message: '您输入的邮箱格式不正确！' },
         { required: true, message: '请输入您的邮箱！' },
       ]
     }
@@ -59,7 +59,7 @@ class UserNew extends Component {
       { label: '用户名', name: 'user', render: <Input maxLength='10'/>, rules: [{ required: true, message: '请输入您的用户名' }] },
       { label: '密码', name: 'password', render: <Input.Password />, rules: passwordRules },
       { label: '昵称', name: 'nickName', render: <Input />,  },
-      { label: 'Email', name: 'email', render: <Form.Item label="Email" name='email' noStyle rules={ EmailRules }><Input /></Form.Item>},
+      { label: '电子邮件', name: 'email', render: <Form.Item label="Email" name='email' noStyle rules={ EmailRules }><Input /></Form.Item>},
       { label: '角色', name: 'role', render: <SearchSelect data={rolesData} /> },
     ]
     return itemArr
@@ -79,12 +79,17 @@ class UserNew extends Component {
   }
 
   onFinish = async (values) => {
+    const { history } = this.props
+
     let params = values
     params.password = utils.stringToMd5(params.password)
     const res = await APIUserRegister(params)
     console.log(res)
     if(res.code === 0) {
       message.info(res.msg)
+      setTimeout(() => {
+        history.push({ pathname: '/user/list' })
+      }, 1000)
     }
   }
 
