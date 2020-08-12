@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-25 17:40:07
- * @LastEditTime: 2020-08-11 23:26:56
+ * @LastEditTime: 2020-08-12 19:53:19
  */ 
 import md5 from 'js-md5'
 
@@ -30,20 +30,26 @@ const utils = {
   stringToMd5(value) {
     return md5(value)
   },
-  localGetItem(value) {
-    return localStorage.getItem(value)
+  localGetItem(key) {
+    return localStorage.getItem(key)
   },
   localSetItem(key, value) {
     localStorage.setItem(key, value)
   },
+  localRemoveItem(key) {
+    localStorage.removeItem(key)
+  },
   localClearItem() {
     localStorage.clear()
   },
-  sessionGetItem(value) {
-    return sessionStorage.getItem(value)
+  sessionGetItem(key) {
+    return sessionStorage.getItem(key)
   },
   sessionSetItem(key, value) {
     sessionStorage.setItem(key, value)
+  },
+  sessionRemoveItem(key) {
+    return sessionStorage.removeItem(key)
   },
   sessionClearItem() {
     sessionStorage.clear()
