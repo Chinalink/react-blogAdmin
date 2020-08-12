@@ -2,16 +2,15 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-02 17:18:45
- * @LastEditTime: 2020-08-09 19:37:43
+ * @LastEditTime: 2020-08-12 20:02:30
  */ 
 import React, { Component, Fragment } from 'react';
 // 依赖组件
 import SerchForm from '../../../components/Common/SearchForm/SearchForm.js'
-import SearchSelect from '../../../components/Common/SearchSelect/SearchSelect.js'
-import { Button, Input, Table} from 'antd'
+import { Button, Input, Table, Popconfirm} from 'antd'
 
 // API
-import { APIgetUserList } from '../../../apis/UserApis'
+import * as UserApi from '../../../apis/UserApis'
 
 class UserList extends Component {
   constructor(props) {
@@ -26,7 +25,7 @@ class UserList extends Component {
     const { userData } = this.state
     const columns = this.getTableColumns()
     const formItems = this.getFormItems()
-    const formOptions = { ref: this.serchFrom, name: 'user_list_search', onFinish: this.serchUserList }
+    const formOptions = { ref: this.serchFrom, name: 'user_list_search', onFinish: this.serchUser }
 
     return (
       <Fragment>
@@ -39,7 +38,7 @@ class UserList extends Component {
   getFormItems = () => {
     const itemArr = [
       { label: '昵称', name: 'nickName', col: 4, render: <Input /> },
-      { label: '电子邮件', name: 'email', col: 4, offset: 1, render: <SearchSelect /> },
+      { label: '电子邮件', name: 'email', col: 4, offset: 1, render: <Input /> },
       { col: 2, offset: 1, render: <Button type="primary" htmlType="submit">筛选</Button> }
     ]
     return itemArr
@@ -58,7 +57,9 @@ class UserList extends Component {
         key: 'action', title: '操作', dataIndex: 'action', render: (text, record, index) => (
           <div className="table-action">
             <Button className="table-action__button" type="primary" size="small" onClick={this.handleEditUser.bind(this, text, record, index)}>编辑</Button>
-            {/* <Button className="table-action__button" type="primary" size="small" danger onClick={this.handleRemoveUser.bind(this, text, record, index)}>删除</Button> */}
+            <Popconfirm title="确认删除该用户吗？" onConfirm={this.handleRemoveUser.bind(this, text, record, index)}>
+              <Button className="table-action__button" type="primary" size="small" danger>删除</Button>
+            </Popconfirm>
           </div>
         )
       }
@@ -69,22 +70,40 @@ class UserList extends Component {
   componentDidMount() {
     this.getUserList()
   }
-  // 查询用户列表
+  // 获取用户列表
   getUserList = async () => {
-    const res = await APIgetUserList()
-    const userData = res.data
-    this.setState({ userData })
+    const params = {
+      pageSize: 10,
+      current: 1
+    }
+    const res = await UserApi.APIgetUserList()
+    if (res.code === 0) {
+      const userData = res.data.result
+      this.setState({ userData })
+    }
   }
+  // 条件查询用户
+  serchUser = async (values) => {
+    const res = await UserApi.APIgetUserList(values)
+    if (res.code === 0) {
+      const userData = res.data.result
+      this.setState({ userData })
+    }
+  }
+
   // 编辑用户
   handleEditUser = (text, record, index) => {
     const { history } = this.props
-    history.push({ pathname: '/user/info', state: {userId: record.id} })}
-
+    history.push({ pathname: '/user/info', state: {userId: record.id} })
+  }
   // 删除用户
-  // handleRemoveUser = (text, record, index) => {
-  //   const params = { id: record.id }
-  //   // this.actionCategory(params, APIdeleteCategory)
-  // }
+  handleRemoveUser = async (text, record, index) => {
+    const params = { userId: record.id }
+    const res = await UserApi.APIdeleteUser(params)
+    if (res.code === 0) {
+      this.getUserList()
+    }
+  }
 }
  
 export default UserList;
