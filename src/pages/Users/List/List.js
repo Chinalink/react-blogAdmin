@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-02 17:18:45
- * @LastEditTime: 2020-08-12 20:02:30
+ * @LastEditTime: 2020-08-12 21:24:30
  */ 
 import React, { Component, Fragment } from 'react';
 // 依赖组件
@@ -16,13 +16,18 @@ class UserList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userData: []
+      userList: [],
+      pagination: {
+        current: 1,
+        pageSize: 1,
+        showSizeChanger: true
+      } 
     }
     this.serchFrom = React.createRef()
     this.categoryFromRef = React.createRef()
   }
   render() { 
-    const { userData } = this.state
+    const { userList, pagination } = this.state
     const columns = this.getTableColumns()
     const formItems = this.getFormItems()
     const formOptions = { ref: this.serchFrom, name: 'user_list_search', onFinish: this.serchUser }
@@ -30,7 +35,7 @@ class UserList extends Component {
     return (
       <Fragment>
         <SerchForm formOptions={formOptions} formItems={formItems} />
-        <Table bordered columns={columns} dataSource={userData} size="middle" className="article-table" />
+        <Table bordered columns={columns} dataSource={userList} pagination={pagination} size="middle" className="article-table" onChange={this.handleTableChange}/>
       </Fragment>
     );
   }
@@ -68,19 +73,25 @@ class UserList extends Component {
   }
 
   componentDidMount() {
-    this.getUserList()
+    const { pagination } = this.state
+    this.getUserList({ ...pagination})
   }
   // 获取用户列表
-  getUserList = async () => {
-    const params = {
-      pageSize: 10,
-      current: 1
-    }
+  getUserList = async (params = {}) => {
     const res = await UserApi.APIgetUserList()
     if (res.code === 0) {
-      const userData = res.data.result
-      this.setState({ userData })
+      const { result } = res.data
+      const data = result.map(item => {
+        item.key = item.id
+        return item
+      }) 
+      this.setState({ userList: data, pagination: { ...params } })
     }
+  }
+  // 分页查询
+  handleTableChange = (pagination) => {
+    console.log(pagination);
+    this.getUserList({ ...pagination })
   }
   // 条件查询用户
   serchUser = async (values) => {
