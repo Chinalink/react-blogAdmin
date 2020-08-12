@@ -2,11 +2,12 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-02 19:01:33
- * @LastEditTime: 2020-08-11 23:33:48
+ * @LastEditTime: 2020-08-12 23:06:08
  */ 
 import React, { Component, Fragment } from 'react';
 import { Form, Input, Button, Upload, message } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import utils from '../../../utils/utils'
 
 // 用户信息的获取更新
 import { APIgetUserInfo, APIupdateUserInfo} from '../../../apis/UserApis'
@@ -118,12 +119,13 @@ class UserInfo extends Component {
 
   // 获取用户信息
   getUserInfo = async () => {
+    const userInfo = utils.sessionGetItem('userInfo')
     const { location } = this.props
     let params
     if (location.state) {
       params = { userId: location.state.userId }
     } else {
-      params = { userId: JSON.parse(localStorage.userInfo).uid }
+      params = { userId: JSON.parse(userInfo).uid }
     }
     const res = await APIgetUserInfo(params)
     if (res.code === 0) {
@@ -143,6 +145,7 @@ class UserInfo extends Component {
   // 更新用户资料
   onFinish = async (values) => {
     const { history, location } = this.props
+    const userInfo = utils.sessionGetItem('userInfo')
 
     delete values.basicInfo
     delete values.contactInfo
@@ -151,7 +154,7 @@ class UserInfo extends Component {
     if (location.state) {
       values.userId = location.state.userId
     } else {
-      values.userId = JSON.parse(localStorage.userInfo).uid
+      values.userId = JSON.parse(userInfo).uid
     }
     const res = await APIupdateUserInfo(values)
     if (res.code === 0) {

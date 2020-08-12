@@ -2,13 +2,13 @@
  * @Description: 分类目录
  * @Author: HuGang
  * @Date: 2020-07-25 09:27:47
- * @LastEditTime: 2020-08-09 00:51:22
+ * @LastEditTime: 2020-08-12 15:06:43
  */ 
 import React, { Component, Fragment } from 'react';
 // 依赖组件
-import { Button, Input, Table, Form, Modal } from 'antd'
+import { Button, Input, Table, Form, message, Modal, Popconfirm } from 'antd'
 // API
-import { APIgetUserList } from '../../../apis/UserApis'
+import * as TagApi from '../../../apis/ArticleApis'
 
 import './style.css'
 
@@ -73,26 +73,41 @@ class TagList extends Component {
     const columns = [
       { key: 'name', title: '标签名称', dataIndex: 'user' },
       { key: 'alias', title: '标签别名', dataIndex: 'nickName' },
-      // {
-      //   key: 'action', title: '操作', dataIndex: 'action', render: (text, record, index) => (
-      //     <div className="table-action">
-      //       <Button className="table-action__button" type="primary" size="small" onClick={this.handleEditArticle.bind(this, text, record, index)}>编辑</Button>
-      //       <Button className="table-action__button" type="primary" size="small" danger onClick={this.handleRemoveArticle.bind(this, text, record, index)}>删除</Button>
-      //     </div>
-      //   )
-      // }
+      {
+        key: 'action', title: '操作', dataIndex: 'action', render: (text, record, index) => (
+          <div className="table-action">
+            <Button className="table-action__button" type="primary" size="small" onClick={this.handleEditTag.bind(this, text, record, index)}>编辑</Button>
+            <Popconfirm title="确认删除该标签吗？" onConfirm={this.handleRemoveTag.bind(this, text, record, index)}>
+              <Button className="table-action__button" type="primary" size="small" danger>删除</Button>
+            </Popconfirm>
+          </div>
+        )
+      }
     ]
     return columns
   }
 
   componentDidMount() {
-    this.getUserList()
+    this.getTagList()
   }
   // 查询标签列表
-  getUserList = async () => {
-    const res = await APIgetUserList()
+  getTagList = async () => {
+    const res = await TagApi.APIgetTagList()
     const userData = res.data
     this.setState({ userData })
+  }
+  
+  // 创建、更新标签
+  handleSubmitTag = async () => {
+    const categoryFromData = await this.categoryFromRef.current.validateFields()
+    const callBack = categoryFromData.id ? TagApi.APIupdateTag : TagApi.APIcreateTag
+    this.actionCategory(categoryFromData, callBack)
+  }
+  // 删除分类
+  handleRemoveTag = (text, record, index) => {
+    const params = { id: record.id }
+
+    this.actionCategory(params, TagApi.APIdeleteTag)
   }
   // 打开弹窗
   openModal = () => {
@@ -103,13 +118,30 @@ class TagList extends Component {
   closeModal = () => {
     this.setState({ isUpdate: false, modalVisible: false })
   }
-  // 校验表单项并提交
-  handleSubmitTag = async () => {
-    console.log('gggg');
-    // const categoryFromData = await this.categoryFromRef.current.validateFields()
-    // const callBack = categoryFromData.id ? APIupdateCategory : APIcreateCategory
-    // this.actionCategory(categoryFromData, callBack)
+  // 编辑分类
+  handleEditTag = (text, record, index) => {
+    console.log(text);
+    this.setState({ isUpdate: true })
+    console.log(record)
+    const formData = Object.assign({}, record)
+    if (formData.parentId === null) {
+      formData.parentId = 'none'
+    }
+    this.openModal()
+    setTimeout(() => {
+      this.categoryFromRef.current.setFieldsValue(formData)
+    }, 50)
+  }
+  
+  actionCategory = async (values, APIcallBack) => {
+    const res = await APIcallBack(values)
+
+    if (res.code === 0) {
+      message.info(res.msg)
+      this.closeModal()
+      this.getCategoryList()
+    }
   }
 }
- 
+
 export default TagList;

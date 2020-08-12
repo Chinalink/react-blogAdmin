@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-02 17:18:45
- * @LastEditTime: 2020-08-12 21:24:30
+ * @LastEditTime: 2020-08-12 21:34:06
  */ 
 import React, { Component, Fragment } from 'react';
 // 依赖组件
@@ -78,14 +78,14 @@ class UserList extends Component {
   }
   // 获取用户列表
   getUserList = async (params = {}) => {
-    const res = await UserApi.APIgetUserList()
+    const res = await UserApi.APIgetUserList(params)
     if (res.code === 0) {
-      const { result } = res.data
+      const { result, total } = res.data
       const data = result.map(item => {
         item.key = item.id
         return item
       }) 
-      this.setState({ userList: data, pagination: { ...params } })
+      this.setState({ userList: data, pagination: { ...params, total } })
     }
   }
   // 分页查询
