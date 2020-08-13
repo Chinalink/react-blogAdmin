@@ -2,7 +2,7 @@
  * @Description: 分类目录
  * @Author: HuGang
  * @Date: 2020-07-25 09:27:47
- * @LastEditTime: 2020-08-09 16:59:00
+ * @LastEditTime: 2020-08-14 00:12:29
  */ 
 import React, { Component } from 'react';
 // 依赖组件
@@ -23,21 +23,27 @@ class Category extends Component {
       categoryData: [], // 分类列表数据
       categoryTreeData: [ // TreeSelect 分类数据
         { title: '无', value: 'none' }
-      ]
+      ],
+      pagination: {
+        current: 1,
+        pageSize: 10
+      }
     }
     this.categoryFromRef = React.createRef()
   }
 
   componentDidMount() {
-    this.getCategoryList()
+    const { pagination } = this.state
+    this.getCategoryList({ ...pagination})
   }
 
   render() {
-    const { modalVisible, tableLoading, confirmLoading, categoryData, isUpdate } = this.state
+    const { modalVisible, tableLoading, pagination, confirmLoading, categoryData, isUpdate } = this.state
     const columns = this.getTableColumns()
     const formOptions = { ref: this.categoryFromRef, preserve:false, labelCol: { span: 5 }, initialValues: { parentId: 'none' }, name: 'article_category_create' }
     const formItems = this.getFormItems()
     const ModalFooter = this.renderModalFooterXml()
+    const paginationOption = Object.assign({}, pagination, { showSizeChanger: true } )
     
     return (
       <Row gutter={[0, 16]}>
@@ -45,7 +51,7 @@ class Category extends Component {
           <Button type="primary" onClick={this.openModal}>添加分类目录</Button>
         </Col>
         <Col span="24">
-          <Table bordered columns={columns} loading={tableLoading} dataSource={categoryData} size="middle" className="article-table" />
+          <Table bordered columns={columns} loading={tableLoading} pagination={paginationOption} dataSource={categoryData} size="middle" className="article-table" />
         </Col>
         {/* 创建分类Modal */}
         <Modal 
@@ -110,22 +116,23 @@ class Category extends Component {
   }
 
   // 查询分类列表目录
-  getCategoryList = async () => {
+  getCategoryList = async (params = {}) => {
     this.setState({ tableLoading: true })
-    const res = await APIgetCategoryList()
+    const res = await APIgetCategoryList(params)
     if(res.code === 0) {
+      const { result, total } = res.data
       // 添加额外字段，用作antd table treeSelect使用
-      const result = res.data.map(item => {
+      const resultData = result.map(item => {
         item.title = item.name // treeSelect 需要
         item.value = item.id // treeSelect 需要
         item.key = item.id // treeTable 需要
         return item
       })
       // 数据格式转换
-      const parentArr = result.filter(i => i.parentId == null)
-      const categoryData = utils.arrToTreeData(result, parentArr, 'parentId')
+      const parentArr = resultData.filter(i => i.parentId == null)
+      const categoryData = utils.arrToTreeData(resultData, parentArr, 'parentId')
       const categoryTreeData = this.state.categoryTreeData.concat(categoryData)
-      this.setState({ categoryData, categoryTreeData, tableLoading: false})
+      this.setState({ categoryData, categoryTreeData, tableLoading: false, pagination: { ...params, total }})
     }
   }
 
