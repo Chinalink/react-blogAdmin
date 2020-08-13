@@ -2,7 +2,7 @@
  * @Description: 分类目录
  * @Author: HuGang
  * @Date: 2020-07-25 09:27:47
- * @LastEditTime: 2020-08-14 00:40:17
+ * @LastEditTime: 2020-08-14 00:58:02
  */ 
 import React, { Component, Fragment } from 'react';
 // 依赖组件
@@ -120,7 +120,6 @@ class TagList extends Component {
   // 创建、更新标签
   handleSubmitTag = async () => {
     const tagFromData = await this.tagFromRef.current.validateFields()
-    console.log('tagFromData', tagFromData);
     const callBack = tagFromData.id ? TagApi.APIupdateTag : TagApi.APIcreateTag
     this.actionCategory(tagFromData, callBack)
   }
@@ -142,7 +141,6 @@ class TagList extends Component {
   handleEditTag = (text, record, index) => {
     this.setState({ isUpdate: true })
     const formData = Object.assign({}, record)
-    console.log('handleEditTag', formData)
     this.openModal()
     setTimeout(() => {
       this.tagFromRef.current.setFieldsValue(formData)
