@@ -2,7 +2,7 @@
  * @Description: 分类目录
  * @Author: HuGang
  * @Date: 2020-07-25 09:27:47
- * @LastEditTime: 2020-08-14 00:12:29
+ * @LastEditTime: 2020-08-14 00:53:09
  */ 
 import React, { Component } from 'react';
 // 依赖组件
@@ -170,9 +170,7 @@ class Category extends Component {
 
   // 编辑分类
   handleEditCategory = (text, record, index) => {
-    console.log(text);
     this.setState({isUpdate: true})
-    console.log(record)
     const formData = Object.assign({}, record)
     if (formData.parentId === null) {
       formData.parentId = 'none'

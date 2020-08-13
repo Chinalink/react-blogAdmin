@@ -2,7 +2,7 @@
  * @Description: 分类目录
  * @Author: HuGang
  * @Date: 2020-07-25 09:27:47
- * @LastEditTime: 2020-08-12 15:06:43
+ * @LastEditTime: 2020-08-14 00:40:17
  */ 
 import React, { Component, Fragment } from 'react';
 // 依赖组件
@@ -16,24 +16,29 @@ class TagList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tagData: [],
+      tagList: [],
       isUpdate: false, // 是否为更新态，用于展示Modal按钮
       modalButtonLoading: false, // 弹窗按钮loading
       modalVisible: false, // 弹窗显示状态
       confirmLoading: false, // 弹窗确认按钮加载态
+      pagination: {
+        current: 1,
+        pageSize: 10
+      }
     }
+    this.tagFromRef = React.createRef()
   }
   render() {
-    const { modalVisible, confirmLoading, isUpdate, userData } = this.state
+    const { modalVisible, confirmLoading, isUpdate, tagList, pagination } = this.state
     const columns = this.getTableColumns()
     const formItems = this.getFormItems()
     const ModalFooter = this.renderModalFooterXml()
-    const formOptions = { ref: this.categoryFromRef, preserve: false, labelCol: { span: 5 }, initialValues: { parentId: 'none' }, name: 'article_category_create' }
-
+    const formOptions = { ref: this.tagFromRef, preserve: false, labelCol: { span: 5 }, initialValues: { parentId: 'none' }, name: 'article_category_create' }
+    const paginationOption = Object.assign({}, pagination, { showSizeChanger: true })
     return (
       <Fragment>
         <Button className="btn-add-tag" type="primary" onClick={this.openModal}>添加标签</Button>
-        <Table bordered columns={columns} dataSource={userData} size="middle" className="article-table" />
+        <Table bordered columns={columns} dataSource={tagList} pagination={paginationOption} size="middle" className="article-table" onChange={this.handleTableChange} />
         {/* 添加标签Modal  */}
         <Modal
           title={`${isUpdate ? '更新' : '创建'}添加`}
@@ -52,6 +57,7 @@ class TagList extends Component {
       </Fragment>
     )
   }
+
   renderModalFooterXml = () => {
     const { modalButtonLoading, isUpdate } = this.state
     return [
@@ -63,6 +69,7 @@ class TagList extends Component {
   // 添加标签表单项
   getFormItems = () => {
     const itemArr = [
+      { label: '标签ID', name: 'id', render: <Input disabled />, hidden: true },
       { label: '标签名称', name: 'name', render: <Input />, rules: [{ required: true, message: '标签名称不能为空' }] },
       { label: '标签别名', name: 'alias', render: <Input /> },
     ]
@@ -71,8 +78,8 @@ class TagList extends Component {
   // 表格列配置
   getTableColumns = () => {
     const columns = [
-      { key: 'name', title: '标签名称', dataIndex: 'user' },
-      { key: 'alias', title: '标签别名', dataIndex: 'nickName' },
+      { key: 'name', title: '标签名称', dataIndex: 'name' },
+      { key: 'alias', title: '标签别名', dataIndex: 'alias' },
       {
         key: 'action', title: '操作', dataIndex: 'action', render: (text, record, index) => (
           <div className="table-action">
@@ -88,20 +95,34 @@ class TagList extends Component {
   }
 
   componentDidMount() {
-    this.getTagList()
+    const { pagination } = this.state
+    this.getTagList({ ...pagination })
   }
   // 查询标签列表
-  getTagList = async () => {
-    const res = await TagApi.APIgetTagList()
-    const userData = res.data
-    this.setState({ userData })
+  getTagList = async (params = {}) => {
+    const res = await TagApi.APIgetTagList(params)
+    if (res.code === 0) {
+      const { result, total } = res.data
+      const data = result.map(item => {
+        if (item.alias === null) {
+          item.alias = '--'
+        }
+        item.key = item.id
+        return item
+      })
+      this.setState({ tagList: data, pagination: { ...params, total } })
+    }
   }
-  
+  // 加载某个页数数据
+  handleTableChange = (pagination) => {
+    this.getAllArticleList({ ...pagination })
+  }
   // 创建、更新标签
   handleSubmitTag = async () => {
-    const categoryFromData = await this.categoryFromRef.current.validateFields()
-    const callBack = categoryFromData.id ? TagApi.APIupdateTag : TagApi.APIcreateTag
-    this.actionCategory(categoryFromData, callBack)
+    const tagFromData = await this.tagFromRef.current.validateFields()
+    console.log('tagFromData', tagFromData);
+    const callBack = tagFromData.id ? TagApi.APIupdateTag : TagApi.APIcreateTag
+    this.actionCategory(tagFromData, callBack)
   }
   // 删除分类
   handleRemoveTag = (text, record, index) => {
@@ -113,23 +134,18 @@ class TagList extends Component {
   openModal = () => {
     this.setState({ modalVisible: true })
   }
-
   // 关闭弹窗 
   closeModal = () => {
     this.setState({ isUpdate: false, modalVisible: false })
   }
   // 编辑分类
   handleEditTag = (text, record, index) => {
-    console.log(text);
     this.setState({ isUpdate: true })
-    console.log(record)
     const formData = Object.assign({}, record)
-    if (formData.parentId === null) {
-      formData.parentId = 'none'
-    }
+    console.log('handleEditTag', formData)
     this.openModal()
     setTimeout(() => {
-      this.categoryFromRef.current.setFieldsValue(formData)
+      this.tagFromRef.current.setFieldsValue(formData)
     }, 50)
   }
   
@@ -139,7 +155,7 @@ class TagList extends Component {
     if (res.code === 0) {
       message.info(res.msg)
       this.closeModal()
-      this.getCategoryList()
+      this.getTagList()
     }
   }
 }

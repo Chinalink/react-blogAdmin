@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-02 17:18:45
- * @LastEditTime: 2020-08-12 21:34:06
+ * @LastEditTime: 2020-08-14 00:56:20
  */ 
 import React, { Component, Fragment } from 'react';
 // 依赖组件
@@ -19,23 +19,22 @@ class UserList extends Component {
       userList: [],
       pagination: {
         current: 1,
-        pageSize: 1,
-        showSizeChanger: true
+        pageSize: 10
       } 
     }
     this.serchFrom = React.createRef()
-    this.categoryFromRef = React.createRef()
   }
   render() { 
     const { userList, pagination } = this.state
     const columns = this.getTableColumns()
     const formItems = this.getFormItems()
     const formOptions = { ref: this.serchFrom, name: 'user_list_search', onFinish: this.serchUser }
+    const paginationOption = Object.assign({}, pagination, { showSizeChanger: true })
 
     return (
       <Fragment>
         <SerchForm formOptions={formOptions} formItems={formItems} />
-        <Table bordered columns={columns} dataSource={userList} pagination={pagination} size="middle" className="article-table" onChange={this.handleTableChange}/>
+        <Table bordered columns={columns} dataSource={userList} pagination={paginationOption} size="middle" className="article-table" onChange={this.handleTableChange}/>
       </Fragment>
     );
   }
