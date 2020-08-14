@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-17 11:07:59
- * @LastEditTime: 2020-08-02 13:56:35
+ * @LastEditTime: 2020-08-14 17:38:25
  */ 
 import React, { Component } from 'react'
 // 依赖组件
@@ -15,7 +15,8 @@ import SearchSelect from '../../../components/Common/SearchSelect/SearchSelect.j
 
 // 依赖工具 & API
 import utils from '../../../utils/utils'
-import { APIcreatePost, APIgetCategoryList } from '../../../apis/ArticleApis'
+import * as ArticleApi from '../../../apis/ArticleApis'
+import * as UserApi from '../../../apis/UserApis'
 
 import 'easymde/dist/easymde.min.css';
 
@@ -31,6 +32,8 @@ class ArticleNew extends Component {
         content: ''
       },
       categoryTreeData: [],
+      authorData: [],
+      tagData: [],
       editorOptions: {
         maxHeight: '500px',
         spellChecker: false,
@@ -47,6 +50,7 @@ class ArticleNew extends Component {
   }
 
   componentDidMount() {
+    this.getAuthorList()
     this.getCategoryList()
     marked.setOptions({
       highlight: code => hljs.highlightAuto(code).value,
@@ -80,13 +84,13 @@ class ArticleNew extends Component {
   }
 
   getHeaderFormItems = () => {
-    const { categoryTreeData } = this.state
+    const { categoryTreeData, authorData, tagData } = this.state
     const itemArr = [
       { label: '标题', name: 'title', col: 16, render: <Input /> },
       { label: '定时发布', name: 'timer', col: 7, offset: 1, render: <DatePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} /> },
-      { label: '标签', name: 'tags', col: 12, render: <SearchSelect /> },
-      { label: '分类目录', name: 'category', col: 11, offset: 1, render: <TreeSelect treeData={categoryTreeData} placeholder="请选择分类" allowClear multiple /> },
-      { label: '作者', name: 'author', col: 4, render: <SearchSelect /> },
+      { label: '标签', name: 'tags', col: 24, render: <SearchSelect data={ tagData } /> },
+      { label: '分类目录', name: 'category', col: 12, render: <TreeSelect treeData={categoryTreeData} placeholder="请选择分类" allowClear multiple /> },
+      { label: '作者', name: 'author', col: 4, offset: 1, render: <SearchSelect data={ authorData } /> },
       { label: '文章类型', name: 'type', col: 4, offset: 1, render: <SearchSelect /> },
     ]
     return itemArr
@@ -94,18 +98,47 @@ class ArticleNew extends Component {
 
   // 查询分类列表目录
   getCategoryList = async () => {
-    const res = await APIgetCategoryList()
+    const res = await ArticleApi.APIgetCategoryList()
     if (res.code === 0) {
+      const { result } = res.data
       // 添加额外字段，用作antd table treeSelect使用
-      const result = res.data.map(item => {
+      const resultData = result.map(item => {
         item.title = item.name // treeSelect 需要
         item.value = item.id // treeSelect 需要
         return item
       })
       // 数据格式转换
-      const parentArr = result.filter(i => i.parentId == null)
-      const categoryTreeData = utils.arrToTreeData(result, parentArr, 'parentId')
+      const parentArr = resultData.filter(i => i.parentId == null)
+      const categoryTreeData = utils.arrToTreeData(resultData, parentArr, 'parentId')
       this.setState({ categoryTreeData })
+    }
+  }
+
+  // 查询标签列表
+  getTagList = async () => {
+    const res = await ArticleApi.APIgetTagList({ pageSize: 100 })
+    if (res.code === 0) {
+      const { result } = res.data
+      const data = result.map(item => {
+        item.text = item.name
+        item.value = item.id
+        return item
+      })
+      this.setState({ tagData: data })
+    }
+  }
+
+  // 获取作者列表
+  getAuthorList = async () => {
+    const res = await UserApi.APIgetUserList({ pageSize: 100, roles: 2 })
+    if (res.code === 0) {
+      const { result } = res.data
+      const data = result.map(item => {
+        item.text = item.nickName
+        item.value = item.id
+        return item
+      }) 
+      this.setState({ authorData: data })
     }
   }
 
@@ -128,7 +161,7 @@ class ArticleNew extends Component {
   handleSubmitArticle = async (type) => {
     const { postData } = this.state
     const { history } = this.props
-    const res = await APIcreatePost({...postData, status: type})
+    const res = await ArticleApi.APIcreatePost({...postData, status: type})
     
     if(res.code === 0) {
       message.info(res.msg)
