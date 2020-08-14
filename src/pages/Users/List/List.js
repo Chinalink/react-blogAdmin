@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-02 17:18:45
- * @LastEditTime: 2020-08-14 00:56:20
+ * @LastEditTime: 2020-08-14 17:06:19
  */ 
 import React, { Component, Fragment } from 'react';
 // 依赖组件
@@ -54,7 +54,7 @@ class UserList extends Component {
       { key: 'user', title: '用户名', dataIndex: 'user' },
       { key: 'author', title: '昵称', dataIndex: 'nickName' },
       { key: 'email', title: '电子邮件', dataIndex: 'email' },
-      { key: 'role', title: '角色', dataIndex: ['role', 'roleName'] },
+      { key: 'role', title: '角色', dataIndex: ['roleName'] },
       { key: 'createdAt', title: '注册时间', dataIndex: 'createdAt' },
       { key: 'articleTotal', title: '文章总数', dataIndex: 'articleTotal' },
       {
@@ -87,6 +87,7 @@ class UserList extends Component {
       this.setState({ userList: data, pagination: { ...params, total } })
     }
   }
+  
   // 分页查询
   handleTableChange = (pagination) => {
     console.log(pagination);
