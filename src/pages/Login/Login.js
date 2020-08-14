@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-05 23:07:16
- * @LastEditTime: 2020-08-12 00:04:08
+ * @LastEditTime: 2020-08-14 19:52:25
  */
 import React, { Component } from 'react';
 import { Form, Input, Button, Checkbox, message } from 'antd';
@@ -22,21 +22,25 @@ class Login extends Component {
   render() {
     const fromOptions = { labelCol: { span: 4 }, onFinish: this.submitLogin, initialValues: this.loginInfo}
     return (
-      <Form className="user-login-form" {...fromOptions}>
-        <Form.Item name="user" rules={[{ required: true, message: '请输入用户名或邮箱'}]} >
-          <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="请输入用户名或邮箱"/>
-        </Form.Item>
-        <Form.Item name="password" rules={[{ required: true, message: '请输入密码', }]}>
-          <Input prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="请输入密码" />
-        </Form.Item>
-        <Form.Item>
-          <Form.Item name="remember" valuePropName="checked" noStyle><Checkbox>记住我的登录信息</Checkbox></Form.Item>
-          <a className="login-form-forgot" href="/">忘记密码</a>
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit" className="login-form-button">登录</Button>
-        </Form.Item>
-      </Form>
+      <div className="user-login">
+        <div className="user-login-form">
+          <Form {...fromOptions}>
+            <Form.Item name="user" rules={[{ required: true, message: '请输入用户名或邮箱'}]} >
+              <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="请输入用户名或邮箱"/>
+            </Form.Item>
+            <Form.Item name="password" rules={[{ required: true, message: '请输入密码', }]}>
+              <Input prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="请输入密码" />
+            </Form.Item>
+            <Form.Item>
+              <Form.Item name="remember" valuePropName="checked" noStyle><Checkbox>记住我的登录信息</Checkbox></Form.Item>
+              <a className="login-form-forgot" href="/">忘记密码</a>
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" className="login-form-button">登录</Button>
+            </Form.Item>
+          </Form>
+        </div>
+      </div>
     );
   }
 
