@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:01:04
- * @LastEditTime: 2020-08-12 19:56:17
+ * @LastEditTime: 2020-08-17 22:14:02
  */ 
 // lib
 import React, { Component } from 'react';
@@ -71,7 +71,7 @@ class Home extends Component {
         history.push({ pathname: '/user/info', state: { userId: JSON.parse(userInfo).uid} })
         break;
       case 'loginOut':
-        utils.sessionClearItem.clear()
+        utils.sessionClearItem()
         utils.localRemoveItem('secret')
         history.push({ pathname: '/login' })
         break;
