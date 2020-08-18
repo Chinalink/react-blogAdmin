@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-05 23:07:16
- * @LastEditTime: 2020-08-14 19:52:25
+ * @LastEditTime: 2020-08-18 23:48:51
  */
 import React, { Component } from 'react';
 import { Form, Input, Button, Checkbox, message } from 'antd';
@@ -48,8 +48,8 @@ class Login extends Component {
     const { history } = this.props
     const params = values
     // 判断是否首次登录
-    const isFirstLogin = utils.localGetItem('secret')
-    if (isFirstLogin !== 'once') {
+    const loginInfo = JSON.parse(utils.localGetItem('loginInfo'))
+    if (!loginInfo || loginInfo.user !== values.user) {
       params.password = utils.stringToMd5(params.password)
     }
 
@@ -63,7 +63,6 @@ class Login extends Component {
         uid: res.data.uid
       }
       if (values.remember === true) {
-        utils.localSetItem('secret', 'once')
         utils.localSetItem('loginInfo', JSON.stringify(params))
       } else {
         utils.localClearItem();

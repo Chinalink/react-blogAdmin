@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-02 19:01:33
- * @LastEditTime: 2020-08-18 23:03:45
+ * @LastEditTime: 2020-08-18 23:42:35
  */ 
 import React, { Component, Fragment } from 'react';
 import { Form, Input, Button, Upload, message } from 'antd';
@@ -165,7 +165,10 @@ class UserInfo extends Component {
     }
     const res = await APIupdateUserInfo(values)
     if (res.code === 0) {
-      history.push({ pathname: '/user/list' })
+      message.info(res.msg)
+      setTimeout(() => {
+        history.push({ pathname: '/user/list' })
+      }, 1000)
     }
   }
 
