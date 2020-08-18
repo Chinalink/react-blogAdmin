@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-02 19:01:33
- * @LastEditTime: 2020-08-12 23:06:08
+ * @LastEditTime: 2020-08-18 23:03:45
  */ 
 import React, { Component, Fragment } from 'react';
 import { Form, Input, Button, Upload, message } from 'antd';
@@ -49,6 +49,7 @@ class UserInfo extends Component {
 
   getFormItems = () => {
     const { EmailRules, imageUrl } = this.state
+    const token = sessionStorage.getItem('token')
     const uploadButton = (
       <div>
         {this.state.loading ? <LoadingOutlined /> : <PlusOutlined />}
@@ -57,7 +58,13 @@ class UserInfo extends Component {
     );
     const props = {
       showUploadList: false,
-      action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76', //上传地址
+      action: '/upload', //上传地址
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      data: {
+        type: 1
+      },
       beforeUpload(file) {
         console.log(file);
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -84,7 +91,7 @@ class UserInfo extends Component {
       { label: '个人简介', name: 'introduce', render: <Input.TextArea rows={4} />},
       {
         label: '头像', name: 'avatar', render: 
-          <Upload name="avatar" listType="picture-card" className="avatar-uploader" {...props} onChange={this.handleChange} >
+          <Upload listType="picture-card" className="avatar-uploader" {...props} onChange={this.handleChange} >
             {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
           </Upload>
       }
