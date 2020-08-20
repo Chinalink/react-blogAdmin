@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:01:04
- * @LastEditTime: 2020-08-20 22:40:43
+ * @LastEditTime: 2020-08-21 01:07:27
  */ 
 // lib
 import React, { Component } from 'react';
@@ -72,7 +72,6 @@ class Home extends Component {
         break;
       case 'loginOut':
         utils.sessionClearItem()
-        utils.localRemoveItem('secret')
         history.push({ pathname: '/login' })
         break;
       default:
