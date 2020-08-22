@@ -2,7 +2,7 @@
  * @Description: axios 封装
  * @Author: HuGang
  * @Date: 2020-07-23 16:42:05
- * @LastEditTime: 2020-08-09 19:12:53
+ * @LastEditTime: 2020-08-22 20:59:17
  */ 
 import axios from 'axios'
 import Qs from 'qs'
@@ -53,10 +53,11 @@ Axios.interceptors.response.use(
       if(error.response.status === 401 && error.response.data.code === 1002) {
         history.push({ pathname: '/login'})
       }
+      return Promise.reject(error.response.data)
     } else {
       message.error('没有联系到服务器哟~')
+      return Promise.reject(error)
     }
-    return Promise.reject(error.response.data)
   }
 )
 
