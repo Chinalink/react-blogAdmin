@@ -2,98 +2,85 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-17 11:07:59
- * @LastEditTime: 2020-08-14 17:38:25
+ * @LastEditTime: 2020-08-22 21:40:24
  */ 
 import React, { Component } from 'react'
 // 依赖组件
-import SimpleMDE from 'react-simplemde-editor'
-import marked from 'marked';
-import hljs from 'highlight.js';
-import { Input, DatePicker, Button, TreeSelect, message } from 'antd'
+import MarkDownEditor from '../../../components/Common/MarkDownEditor/MarkDownEditor'
+import { Input, DatePicker, Button, message, Row, Col, Switch } from 'antd'
 import SerchForm from '../../../components/Common/SearchForm/SearchForm.js'
 import SearchSelect from '../../../components/Common/SearchSelect/SearchSelect.js'
+import FormTree from '../../../components/Common/FormTree/FormTree'
 
 // 依赖工具 & API
 import utils from '../../../utils/utils'
 import * as ArticleApi from '../../../apis/ArticleApis'
 import * as UserApi from '../../../apis/UserApis'
 
-import 'easymde/dist/easymde.min.css';
-
 import './style.css'
-import './markDown.css'
 
 class ArticleNew extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      htmlValue: '',
+      categoryTreeData: [], // 分类列表
+      authorData: [], // 作者列表
+      tagData: [], // 标签列表
       articleData: {
         content: ''
-      },
-      categoryTreeData: [],
-      authorData: [],
-      tagData: [],
-      editorOptions: {
-        maxHeight: '500px',
-        spellChecker: false,
-        toolbar: [
-          'bold', 'italic', 'heading', '|',
-          'quote', 'code', 'table', 'horizontal-rule', 'unordered-list', 'ordered-list', '|', 
-          'link', 'image', '|',
-          'side-by-side', 'fullscreen', '|',
-          'guide'
-        ]
       }
     }
-    this.newArticleFrom = React.createRef()
   }
 
   componentDidMount() {
-    this.getAuthorList()
-    this.getCategoryList()
-    marked.setOptions({
-      highlight: code => hljs.highlightAuto(code).value,
-    });
+    this.init()
   }
 
   render() { 
-    const { articleData, htmlValue, editorOptions } = this.state
+    const { articleData } = this.state
     const { content } = articleData
-    const headerFormOptions = { ref: this.newArticleFrom, name: 'article_new_header__search', onValuesChange: this.changeArticleOption }
-    const headerFormItems = this.getHeaderFormItems()
+    const headerFormOptions = { ref: this.newArticleFrom, name: 'article_new__form', layout: 'vertical', onValuesChange: this.changeArticleOption }
+    const headerFormItems = this.getArticleFormItems()
 
     return (
       <div className="article-new__wrap">
-        <SerchForm formOptions={headerFormOptions} formItems={headerFormItems} />
-        <SimpleMDE
-          ref={(ref) => this.simpleMDE = ref}
-          id="write"
-          value={content}
-          options={editorOptions}
-          onChange={this.handleChange}
-        />
-        {/* markdown 渲染测试 */}
-        <div dangerouslySetInnerHTML={{ __html: marked(htmlValue) }}></div>
-        <div className="article-new__footer">
-          <Button type="primary" onClick={this.handleSubmitArticle.bind(this, 0)}>保存草稿</Button>
-          <Button className="article-submit" type="primary" onClick={this.handleSubmitArticle.bind(this, 1)}>发布</Button>
-        </div>
+        <Row>
+          <Col span="19">
+            <h4 className="article-new__label">标题</h4>
+            <Input className="article-new__title" onChange={this.handleTitleChange} />
+            <h4 className="article-new__label">正文</h4>
+            <MarkDownEditor value={content} onChange={this.editorChange} />
+          </Col>
+          <Col span="4" offset="1">
+            <div className="article-new__button">
+              <Button type="default" onClick={this.handleSubmitArticle.bind(this, 0)}>保存草稿</Button>
+              <Button className="article-submit" type="primary" onClick={this.handleSubmitArticle.bind(this, 1)}>发布文章</Button>
+            </div>
+            <SerchForm formOptions={headerFormOptions} formItems={headerFormItems} />
+            
+          </Col>
+        </Row>
       </div>
     )
   }
 
-  getHeaderFormItems = () => {
+  getArticleFormItems = () => {
     const { categoryTreeData, authorData, tagData } = this.state
     const itemArr = [
-      { label: '标题', name: 'title', col: 16, render: <Input /> },
-      { label: '定时发布', name: 'timer', col: 7, offset: 1, render: <DatePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} /> },
-      { label: '标签', name: 'tags', col: 24, render: <SearchSelect data={ tagData } /> },
-      { label: '分类目录', name: 'category', col: 12, render: <TreeSelect treeData={categoryTreeData} placeholder="请选择分类" allowClear multiple /> },
-      { label: '作者', name: 'author', col: 4, offset: 1, render: <SearchSelect data={ authorData } /> },
-      { label: '文章类型', name: 'type', col: 4, offset: 1, render: <SearchSelect /> },
+      { label: '文章置顶', name: 'topping', col: 24, valuePropName: 'checked', render: <Switch /> },
+      { label: '定时发布', name: 'timer', col: 24, render: <DatePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} /> },
+      { label: '分类', name: 'category', col: 24, render: <FormTree className="category-tree" checkable checkStrictly treeData={categoryTreeData} /> },
+      { label: '标签', name: 'tags', col: 24, render: <SearchSelect labelInValue mode="tags" data={tagData} /> },
+      { label: '作者', name: 'author', col: 24, render: <SearchSelect data={authorData} /> },
+      { label: '缩略图', name: 'thumbnail', col: 24, valuePropName: 'checked', render: <Switch /> },
     ]
     return itemArr
+  }
+  // 初始化数据
+  init = () => {
+    this.getCategoryList()
+    this.getTagList()
+    this.getAuthorList()
   }
 
   // 查询分类列表目录
@@ -101,10 +88,10 @@ class ArticleNew extends Component {
     const res = await ArticleApi.APIgetCategoryList()
     if (res.code === 0) {
       const { result } = res.data
-      // 添加额外字段，用作antd table treeSelect使用
+      // 添加额外字段，用作antd Tree使用
       const resultData = result.map(item => {
-        item.title = item.name // treeSelect 需要
-        item.value = item.id // treeSelect 需要
+        item.title = item.name // tree 需要
+        item.key = item.id // tree 需要
         return item
       })
       // 数据格式转换
@@ -121,7 +108,7 @@ class ArticleNew extends Component {
       const { result } = res.data
       const data = result.map(item => {
         item.text = item.name
-        item.value = item.id
+        item.value = item.name
         return item
       })
       this.setState({ tagData: data })
@@ -130,44 +117,52 @@ class ArticleNew extends Component {
 
   // 获取作者列表
   getAuthorList = async () => {
-    const res = await UserApi.APIgetUserList({ pageSize: 100, roles: 2 })
+    const res = await UserApi.APIgetUserList({ pageSize: 100, roles: 'author' })
     if (res.code === 0) {
       const { result } = res.data
       const data = result.map(item => {
         item.text = item.nickName
         item.value = item.id
         return item
-      }) 
+      })
       this.setState({ authorData: data })
     }
   }
 
-  // 文章内容变化追加到提交数据
-  handleChange = (value) => {
-    const { postData } = this.state
+  handleTitleChange = (ev) => {
+    const { articleData } = this.state
     let tempPostData = {}
-    tempPostData = { ...postData, content: value }
-    this.setState({ postData: tempPostData })
+    tempPostData = { ...articleData, title: ev.target.value }
+    this.setState({ articleData: tempPostData })
   }
 
-  changeArticleOption = (changedValues, allValues) => {
-    const { postData } = this.state
+  editorChange = (value) => {
+    const { articleData } = this.state
     let tempPostData = {}
-    tempPostData = { ...tempPostData, ...postData, ...allValues}
-    this.setState({ postData: tempPostData })
+    tempPostData = { ...articleData, content: value }
+    this.setState({ articleData: tempPostData })
+  }
+
+  // 表单内容变化
+  changeArticleOption = (changedValues, allValues) => {
+    console.log(allValues)
+    const { articleData } = this.state
+    let tempPostData = {}
+    tempPostData = { ...tempPostData, ...articleData, ...allValues }
+    this.setState({ articleData: tempPostData })
   }
 
   // 保存文章
   handleSubmitArticle = async (type) => {
-    const { postData } = this.state
+    const { articleData } = this.state
     const { history } = this.props
-    const res = await ArticleApi.APIcreatePost({...postData, status: type})
-    
-    if(res.code === 0) {
+    const res = await ArticleApi.APIcreatePost({ ...articleData, status: type })
+
+    if (res.code === 0) {
       message.info(res.msg)
-      history.push({pathname: 'list'})
+      history.push({ pathname: 'list' })
     }
   }
 }
- 
+
 export default ArticleNew;
