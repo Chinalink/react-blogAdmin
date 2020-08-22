@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-02 19:01:33
- * @LastEditTime: 2020-08-18 23:03:45
+ * @LastEditTime: 2020-08-22 15:47:46
  */ 
 import React, { Component, Fragment } from 'react';
 import { Form, Input, Button, Upload, message } from 'antd';
@@ -66,7 +66,6 @@ class UserInfo extends Component {
         type: 1
       },
       beforeUpload(file) {
-        console.log(file);
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
         if (!isJpgOrPng) {
           message.error('请上传正常格式的图片!');
@@ -126,13 +125,13 @@ class UserInfo extends Component {
 
   // 获取用户信息
   getUserInfo = async () => {
-    const userInfo = utils.sessionGetItem('userInfo')
     const { location } = this.props
+    const userInfo = JSON.parse(utils.sessionGetItem('userInfo'))
     let params
     if (location.state) {
       params = { userId: location.state.userId }
     } else {
-      params = { userId: JSON.parse(userInfo).uid }
+      params = { userId: userInfo.uid }
     }
     const res = await APIgetUserInfo(params)
     if (res.code === 0) {
@@ -142,6 +141,7 @@ class UserInfo extends Component {
           return key
         }
       })
+      this.setState({ imageUrl: res.data.avatar })
       // const formData = Object.assign({}, res.data)
       setTimeout(() => {
         this.userFromRef.current.setFieldsValue(res.data)
@@ -152,16 +152,29 @@ class UserInfo extends Component {
   // 更新用户资料
   onFinish = async (values) => {
     const { history, location } = this.props
-    const userInfo = utils.sessionGetItem('userInfo')
-
+    const userInfo = JSON.parse(utils.sessionGetItem('userInfo'))
+    
     delete values.basicInfo
     delete values.contactInfo
     delete values.aboutYou
-    
+
+    //更新本地缓存头像
+    if (values.avatar instanceof Object) {
+      const avatorName = values.avatar.file.response.data.name
+      const avatorUrl = `http://qf8zthosn.hn-bkt.clouddn.com/${avatorName}`
+      values.avatar = avatorUrl
+      userInfo.avatar = avatorUrl
+    } else {
+      userInfo.avatar = values.avatar
+    }
+    //更新本地缓存昵称
+    userInfo.name = values.nickName
+    utils.sessionSetItem('userInfo', JSON.stringify(userInfo))
+
     if (location.state) {
       values.userId = location.state.userId
     } else {
-      values.userId = JSON.parse(userInfo).uid
+      values.userId = userInfo.uid
     }
     const res = await APIupdateUserInfo(values)
     if (res.code === 0) {

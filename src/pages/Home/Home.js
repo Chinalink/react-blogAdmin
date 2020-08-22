@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:01:04
- * @LastEditTime: 2020-08-21 01:07:27
+ * @LastEditTime: 2020-08-22 14:54:49
  */ 
 // lib
 import React, { Component } from 'react';
@@ -42,7 +42,7 @@ class Home extends Component {
         <Layout className="home-layout">
           <Sider collapsed={collapsed} routes={routes} />
           <Layout className="home-main">
-            <Header collapsed={collapsed} handlerToggle={this.toggle} menuData={menuData} handlerMenu={this.handlerMenu} userInfo={utils.sessionGetItem('userInfo')} />
+            <Header collapsed={collapsed} handlerToggle={this.toggle} menuData={menuData} handlerMenu={this.handlerMenu} userInfo={JSON.parse(utils.sessionGetItem('userInfo'))} />
             <div className="home-main__wrap">
               <Breadcrumb routes={routes} />
               <Content className="home-main__content">
@@ -61,6 +61,9 @@ class Home extends Component {
     });
   }
 
+  componentDidMount() {
+    console.log(typeof (utils.sessionGetItem('userInfo')));
+  }
   
   handlerMenu = ({ key }) => {
     const { history } = this.props
