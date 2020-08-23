@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-17 11:07:59
- * @LastEditTime: 2020-08-22 21:40:24
+ * @LastEditTime: 2020-08-23 16:19:58
  */ 
 import React, { Component } from 'react'
 // 依赖组件
@@ -129,6 +129,7 @@ class ArticleNew extends Component {
     }
   }
 
+  // 标题变化
   handleTitleChange = (ev) => {
     const { articleData } = this.state
     let tempPostData = {}
@@ -136,6 +137,7 @@ class ArticleNew extends Component {
     this.setState({ articleData: tempPostData })
   }
 
+  // 文章内容变化
   editorChange = (value) => {
     const { articleData } = this.state
     let tempPostData = {}
@@ -145,11 +147,28 @@ class ArticleNew extends Component {
 
   // 表单内容变化
   changeArticleOption = (changedValues, allValues) => {
-    console.log(allValues)
     const { articleData } = this.state
     let tempPostData = {}
-    tempPostData = { ...tempPostData, ...articleData, ...allValues }
+    let tags = []
+    if (allValues.tags && allValues.tags.length > 0) {
+      tags = this.filterTags(allValues.tags)
+    }
+    tempPostData = { ...tempPostData, ...articleData, ...allValues, tags }
     this.setState({ articleData: tempPostData })
+  }
+
+  // 处理tag标签数据
+  filterTags = (tags) => {
+    const { tagData } = this.state
+    const result = tags.map(tag => {
+      let index = tagData.findIndex(item => item.name === tag.label)
+      const node = { id: tag.value, name: tag.label }
+      if(index > -1) {
+        node.id = tagData[index].id
+      }
+      return node
+    }) 
+    return result
   }
 
   // 保存文章
