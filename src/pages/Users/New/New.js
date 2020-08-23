@@ -6,7 +6,7 @@
  */ 
 import React, { Component, Fragment } from 'react';
 import { Form, Input, Button, message } from 'antd';
-import SearchSelect from '../../../components/Common/SearchSelect/SearchSelect.js'
+import FormSelect from '../../../components/Common/FormSelect/FormSelect.js'
 import utils from '../../../utils/utils'
 import { APIgetRolesList, APIUserRegister } from '../../../apis/UserApis'
 
@@ -60,7 +60,7 @@ class UserNew extends Component {
       { label: '密码', name: 'password', render: <Input.Password />, rules: passwordRules },
       { label: '昵称', name: 'nickName', render: <Input />,  },
       { label: '电子邮件', name: 'email', render: <Form.Item label="Email" name='email' noStyle rules={ EmailRules }><Input /></Form.Item>},
-      { label: '角色', name: 'role', render: <SearchSelect data={rolesData} /> },
+      { label: '角色', name: 'role', render: <FormSelect data={rolesData} /> },
     ]
     return itemArr
   }

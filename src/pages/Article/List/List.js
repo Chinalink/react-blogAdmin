@@ -2,12 +2,12 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:01:15
- * @LastEditTime: 2020-08-12 21:15:34
+ * @LastEditTime: 2020-08-23 16:15:47
  */ 
 import React, { Component, Fragment } from 'react';
 // 依赖组件
 import SerchForm from '../../../components/Common/SearchForm/SearchForm.js'
-import SearchSelect from '../../../components/Common/SearchSelect/SearchSelect.js'
+import FormSelect from '../../../components/Common/FormSelect/FormSelect.js'
 import { Button, Input, DatePicker, Tag, Table } from 'antd';
 // 依赖API
 import { APIgetArticleList } from '../../../apis/ArticleApis.js'
@@ -52,10 +52,10 @@ class ArticleList extends Component {
   getFormItems = () => {
     const itemArr = [
       { label: '文章标题', name: 'title', col: 8, render: <Input /> },
-      { label: '分类', name: 'category', col: 7, offset: 1, render: <SearchSelect /> },
-      { label: '标签', name: 'tags', col: 7, offset: 1, render: <SearchSelect /> },
-      { label: '发布状态', name: 'status', col: 4, render: <SearchSelect /> },
-      { label: '作者', name: 'author', col: 4, offset: 1, render: <SearchSelect /> },
+      { label: '分类', name: 'category', col: 7, offset: 1, render: <FormSelect /> },
+      { label: '标签', name: 'tags', col: 7, offset: 1, render: <FormSelect /> },
+      { label: '发布状态', name: 'status', col: 4, render: <FormSelect /> },
+      { label: '作者', name: 'author', col: 4, offset: 1, render: <FormSelect /> },
       { label: '日期', name: 'date', col: 7, offset: 1, render: <DatePicker.RangePicker format='YYYY/MM/DD' /> },
       { className: 'search-button__wrap', col: 2, offset: 5, render: <Button type="primary" htmlType="submit">筛选</Button> }
     ]
@@ -75,13 +75,21 @@ class ArticleList extends Component {
       { key: 'sorts', title: '分类目录', dataIndex: 'sorts', render: (text, record, index) => (
         <Fragment>
           {
-            record.sorts.map(item => (
-              <span key={item.id}>{item.name}、</span>
+            record.sorts.map((item, index) => (
+              <span key={item.id}>{`${index === 0 ? item.name : '、' + item.name}`}</span>
             ))
           }
         </Fragment>
       )},
-      { key: 'tags', title: '标签', dataIndex: 'tags' },
+      { key: 'tags', title: '标签', dataIndex: 'tags', render: (text, record, index) => (
+        <Fragment>
+          {
+            record.tags.map((item, index) => (
+              <span key={item.id}>{`${index === 0 ? item.name : '、' + item.name}`}</span>
+            ))
+          }
+        </Fragment>
+      )},
       { key: 'updatedAt', title: '最后修改日期', dataIndex: 'updatedAt' },
       {
         key: 'action', title: '操作', render: (text, record, index) => (
