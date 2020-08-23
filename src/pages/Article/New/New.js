@@ -9,7 +9,7 @@ import React, { Component } from 'react'
 import MarkDownEditor from '../../../components/Common/MarkDownEditor/MarkDownEditor'
 import { Input, DatePicker, Button, message, Row, Col, Switch } from 'antd'
 import SerchForm from '../../../components/Common/SearchForm/SearchForm.js'
-import SearchSelect from '../../../components/Common/SearchSelect/SearchSelect.js'
+import FormSelect from '../../../components/Common/FormSelect/FormSelect.js'
 import FormTree from '../../../components/Common/FormTree/FormTree'
 
 // 依赖工具 & API
@@ -70,8 +70,8 @@ class ArticleNew extends Component {
       { label: '文章置顶', name: 'topping', col: 24, valuePropName: 'checked', render: <Switch /> },
       { label: '定时发布', name: 'timer', col: 24, render: <DatePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} /> },
       { label: '分类', name: 'category', col: 24, render: <FormTree className="category-tree" checkable checkStrictly treeData={categoryTreeData} /> },
-      { label: '标签', name: 'tags', col: 24, render: <SearchSelect labelInValue mode="tags" data={tagData} /> },
-      { label: '作者', name: 'author', col: 24, render: <SearchSelect data={authorData} /> },
+      { label: '标签', name: 'tags', col: 24, render: <FormSelect labelInValue mode="tags" data={tagData} /> },
+      { label: '作者', name: 'author', col: 24, render: <FormSelect data={authorData} /> },
       { label: '缩略图', name: 'thumbnail', col: 24, valuePropName: 'checked', render: <Switch /> },
     ]
     return itemArr

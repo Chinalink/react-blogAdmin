@@ -2,12 +2,12 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-23 17:43:11
- * @LastEditTime: 2020-08-22 19:49:41
+ * @LastEditTime: 2020-08-23 16:41:50
  */ 
 import React from 'react';
 import { Select } from 'antd'
 
-function SearchSelect(props) {
+function FormSelect(props) {
   const { value = '', onChange, data = [] } = props
 
   const onSelectChange = (selectValue) => {
@@ -26,4 +26,4 @@ function SearchSelect(props) {
   )
 }
 
-export default SearchSelect
+export default FormSelect
