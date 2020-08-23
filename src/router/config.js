@@ -2,13 +2,13 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:31:56
- * @LastEditTime: 2020-08-22 22:42:56
+ * @LastEditTime: 2020-08-23 19:24:23
  */ 
 import Home from '../pages/Home/Home.js'
 import Index from '../pages/Index/Index.js'
 import Login from '../pages/Login/Login.js'
 import Photo from '../pages/Photo/Photo.js'
-import Theme from '../pages/Theme/Theme.js'
+// import Theme from '../pages/Theme/Theme.js'
 
 import ArticleCategory from '../pages/Article/Category/Category.js'
 import ArticleList from '../pages/Article/List/List.js'
@@ -25,6 +25,7 @@ export const menus = [
     path: '/article', title: '文章管理', icon: 'ProfileOutlined', subs: [
       { path: '/article/list', title: '文章列表', component: ArticleList },
       { path: '/article/new', title: '新建文章', component: ArticleNew },
+      { path: '/article/edit', title: '编辑文章', menuHide: true, component: ArticleNew },
       { path: '/article/category', title: '分类目录', component: ArticleCategory },
       { path: '/article/tag', title: '标签', component: ArticleTag }
     ]
@@ -37,7 +38,7 @@ export const menus = [
     ]
   },
   {path: '/photo', title: '图片集', icon: 'AppstoreOutlined', component: Photo },
-  {path: '/theme', title: '主题设置', icon: 'AppstoreOutlined', component: Theme },
+  // {path: '/theme', title: '主题设置', icon: 'AppstoreOutlined', component: Theme },
 ]
 
 export const main = [

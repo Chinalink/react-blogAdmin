@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:01:15
- * @LastEditTime: 2020-08-23 16:15:47
+ * @LastEditTime: 2020-08-23 19:59:21
  */ 
 import React, { Component, Fragment } from 'react';
 // 依赖组件
@@ -126,15 +126,12 @@ class ArticleList extends Component {
   }
 
   handlePreviewArticle = (text, record, index) => {
-    console.log(text)
-    console.log(record)
-    console.log(index)
+    
   }
 
   handleEditArticle = (text, record, index) => {
-    console.log(text)
-    console.log(record)
-    console.log(index)
+    const { history } = this.props
+    history.push({ pathname: `/article/edit`, search: `?id=${record.id}` })
   }
 
   handleRemoveArticle = (text, record, index) => {

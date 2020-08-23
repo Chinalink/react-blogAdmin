@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-23 16:42:28
- * @LastEditTime: 2020-08-12 23:19:18
+ * @LastEditTime: 2020-08-23 20:08:39
  */ 
 
 import Axios from '../utils/service.js'
@@ -14,6 +14,7 @@ export const APIupdateCategory = params => Axios.put(`/article/sort/${params.id}
 export const APIdeleteCategory = params => Axios.delete(`/article/sort/${params.id}`) // 删除分类
 // 文章
 export const APIgetArticleList = params => Axios.get('/article/post', params) // 查询文章列表
+export const APIgetArticle = params => Axios.get('/article/post/detail', params) // 查询文章列表
 export const APIcreatePost = params => Axios.post('/article/post', params) // 创建文章
 // 标签
 export const APIgetTagList = params => Axios.get('/article/tag', params) // 查询标签列表

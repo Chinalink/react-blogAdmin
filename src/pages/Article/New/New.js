@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-17 11:07:59
- * @LastEditTime: 2020-08-23 16:19:58
+ * @LastEditTime: 2020-08-23 20:47:12
  */ 
 import React, { Component } from 'react'
 // 依赖组件
@@ -27,37 +27,42 @@ class ArticleNew extends Component {
       authorData: [], // 作者列表
       tagData: [], // 标签列表
       articleData: {
+        title: '',
+        category: [],
+        tags: [],
         content: ''
       }
     }
+    this.newArticleFrom = React.createRef()
   }
 
   componentDidMount() {
     this.init()
   }
 
-  render() { 
+  render() {
+    const { history } = this.props
     const { articleData } = this.state
-    const { content } = articleData
-    const headerFormOptions = { ref: this.newArticleFrom, name: 'article_new__form', layout: 'vertical', onValuesChange: this.changeArticleOption }
-    const headerFormItems = this.getArticleFormItems()
+    const { content, title } = articleData
+    const articleFormOptions = { ref: this.newArticleFrom, name: 'article_new__form', layout: 'vertical', onValuesChange: this.changeArticleOption }
+    const articleFormItems = this.getArticleFormItems()
+    const isEdit = history.location.pathname === '/article/edit'
 
     return (
       <div className="article-new__wrap">
         <Row>
           <Col span="19">
             <h4 className="article-new__label">标题</h4>
-            <Input className="article-new__title" onChange={this.handleTitleChange} />
+            <Input className="article-new__title" value={title} onChange={this.handleTitleChange} />
             <h4 className="article-new__label">正文</h4>
             <MarkDownEditor value={content} onChange={this.editorChange} />
           </Col>
           <Col span="4" offset="1">
             <div className="article-new__button">
-              <Button type="default" onClick={this.handleSubmitArticle.bind(this, 0)}>保存草稿</Button>
-              <Button className="article-submit" type="primary" onClick={this.handleSubmitArticle.bind(this, 1)}>发布文章</Button>
+              { !isEdit && <Button type="default" onClick={this.handleSubmitArticle.bind(this, 0)}>保存草稿</Button> }
+              <Button className="article-submit" type="primary" onClick={this.handleSubmitArticle.bind(this, isEdit)}>{ isEdit ? '更新文章' : '发布文章' }</Button>
             </div>
-            <SerchForm formOptions={headerFormOptions} formItems={headerFormItems} />
-            
+            <SerchForm formOptions={articleFormOptions} formItems={articleFormItems} />
           </Col>
         </Row>
       </div>
@@ -78,9 +83,36 @@ class ArticleNew extends Component {
   }
   // 初始化数据
   init = () => {
+    const { history } = this.props
     this.getCategoryList()
     this.getTagList()
     this.getAuthorList()
+    if (history.location.search.length > 0) {
+      const params = utils.qsToParams(history.location.search)
+      this.getArticleDetail(params)
+    }
+  }
+
+  // 查询文章详情
+  getArticleDetail = async (params) => {
+    const res = await ArticleApi.APIgetArticle(params)
+    if(res.code === 0) {
+      const category = res.data.sorts.map(item => item.id)
+      const tags = res.data.tags.map(item => {
+        item.text = item.name
+        item.value = item.name
+        return item
+      })
+      const detaile = {
+        title: res.data.title,
+        author: `${res.data.author}`,
+        content: res.data.content,
+        category,
+        tags
+      }
+      this.setState({ articleData: detaile })
+      this.newArticleFrom.current.setFieldsValue(detaile)
+    }
   }
 
   // 查询分类列表目录
