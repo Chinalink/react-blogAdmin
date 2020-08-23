@@ -2,7 +2,7 @@
  * @Description:
  * @Author: HuGang
  * @Date: 2020-08-21 14:50:18
- * @LastEditTime: 2020-08-22 18:18:13
+ * @LastEditTime: 2020-08-23 20:29:40
  */
 import React, { Component, Fragment } from 'react'
 // 依赖组件
@@ -63,11 +63,12 @@ class MarkDownEditor extends Component {
   }
 
   render() {
+    const { value } = this.props
     const { editorProps, uploadVisible } = this.state
     const uploadProps = this.getUploadOptions()
     return (
       <Fragment>
-        <SimpleMDE {...editorProps} onChange={this.handleChange} />
+        <SimpleMDE {...editorProps} value={value} onChange={this.handleChange} />
         {/* 图片上传弹窗 */}
         <Modal
           title="插入图片"

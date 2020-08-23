@@ -2,9 +2,10 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-25 17:40:07
- * @LastEditTime: 2020-08-12 19:53:19
+ * @LastEditTime: 2020-08-23 20:04:37
  */ 
 import md5 from 'js-md5'
+import Qs from 'qs'
 
 const utils = {
   // 一维数组转树形数组
@@ -25,6 +26,10 @@ const utils = {
       return pNode
     })
     return parentArr
+  },
+  // qs序列化参数
+  qsToParams(params) {
+    return Qs.parse(params, { ignoreQueryPrefix: true })
   },
   // md5序列化
   stringToMd5(value) {
