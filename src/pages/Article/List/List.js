@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:01:15
- * @LastEditTime: 2020-08-12 21:15:34
+ * @LastEditTime: 2020-08-23 16:15:47
  */ 
 import React, { Component, Fragment } from 'react';
 // 依赖组件
@@ -75,13 +75,21 @@ class ArticleList extends Component {
       { key: 'sorts', title: '分类目录', dataIndex: 'sorts', render: (text, record, index) => (
         <Fragment>
           {
-            record.sorts.map(item => (
-              <span key={item.id}>{item.name}、</span>
+            record.sorts.map((item, index) => (
+              <span key={item.id}>{`${index === 0 ? item.name : '、' + item.name}`}</span>
             ))
           }
         </Fragment>
       )},
-      { key: 'tags', title: '标签', dataIndex: 'tags' },
+      { key: 'tags', title: '标签', dataIndex: 'tags', render: (text, record, index) => (
+        <Fragment>
+          {
+            record.tags.map((item, index) => (
+              <span key={item.id}>{`${index === 0 ? item.name : '、' + item.name}`}</span>
+            ))
+          }
+        </Fragment>
+      )},
       { key: 'updatedAt', title: '最后修改日期', dataIndex: 'updatedAt' },
       {
         key: 'action', title: '操作', render: (text, record, index) => (
