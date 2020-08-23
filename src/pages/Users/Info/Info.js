@@ -2,15 +2,15 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-02 19:01:33
- * @LastEditTime: 2020-08-22 15:47:46
- */ 
+ * @LastEditTime: 2020-08-23 18:30:17
+ */
 import React, { Component, Fragment } from 'react';
 import { Form, Input, Button, Upload, message } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import utils from '../../../utils/utils'
 
 // 用户信息的获取更新
-import { APIgetUserInfo, APIupdateUserInfo} from '../../../apis/UserApis'
+import { APIgetUserInfo, APIupdateUserInfo } from '../../../apis/UserApis'
 
 import './style.css'
 
@@ -29,8 +29,8 @@ class UserInfo extends Component {
 
   render() {
     const formItems = this.getFormItems()
-    const fromOptions = { ref: this.userFromRef, labelCol:{ span: 4 }, onFinish:this.onFinish }
-  
+    const fromOptions = { ref: this.userFromRef, labelCol: { span: 4 }, onFinish: this.onFinish }
+
     return (
       <Fragment>
         <Form {...fromOptions} className="user-new__wrap">
@@ -79,17 +79,17 @@ class UserInfo extends Component {
     };
     const itemArr = [
       { name: 'basicInfo', render: <h3>基本信息</h3> },
-      { label: '用户名', name: 'user', render: <Input disabled />, rules: [{ required: true, message: '用户名不能为空' }]},
-      { label: '昵称', name: 'nickName', render: <Input />},
+      { label: '用户名', name: 'user', render: <Input disabled />, rules: [{ required: true, message: '用户名不能为空' }] },
+      { label: '昵称', name: 'nickName', render: <Input /> },
       { name: 'contactInfo', render: <h3>联系信息</h3> },
       { label: '邮箱', name: 'email', render: <Input />, rules: EmailRules },
-      { label: 'QQ', name: 'qq', render: <Input />},
-      { label: '微信', name: 'wechat', render: <Input />},
-      { label: 'Github', name: 'github', render: <Input />},
-      { name: 'aboutYou', render: <h3>关于您自己</h3>},
-      { label: '个人简介', name: 'introduce', render: <Input.TextArea rows={4} />},
+      { label: 'QQ', name: 'qq', render: <Input /> },
+      { label: '微信', name: 'wechat', render: <Input /> },
+      { label: 'Github', name: 'github', render: <Input /> },
+      { name: 'aboutYou', render: <h3>关于您自己</h3> },
+      { label: '个人简介', name: 'introduce', render: <Input.TextArea rows={4} /> },
       {
-        label: '头像', name: 'avatar', render: 
+        label: '头像', name: 'avatar', render:
           <Upload listType="picture-card" className="avatar-uploader" {...props} onChange={this.handleChange} >
             {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
           </Upload>
@@ -148,12 +148,12 @@ class UserInfo extends Component {
       }, 50)
     }
   }
-  
+
   // 更新用户资料
   onFinish = async (values) => {
     const { history, location } = this.props
     const userInfo = JSON.parse(utils.sessionGetItem('userInfo'))
-    
+
     delete values.basicInfo
     delete values.contactInfo
     delete values.aboutYou

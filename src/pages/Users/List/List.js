@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-02 17:18:45
- * @LastEditTime: 2020-08-14 17:06:19
+ * @LastEditTime: 2020-08-22 19:01:15
  */ 
 import React, { Component, Fragment } from 'react';
 // 依赖组件
@@ -97,8 +97,8 @@ class UserList extends Component {
   serchUser = async (values) => {
     const res = await UserApi.APIgetUserList(values)
     if (res.code === 0) {
-      const userData = res.data.result
-      this.setState({ userData })
+      const userList = res.data.result
+      this.setState({ userList })
     }
   }
 
