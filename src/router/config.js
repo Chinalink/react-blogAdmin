@@ -2,11 +2,13 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:31:56
- * @LastEditTime: 2020-08-10 18:14:12
+ * @LastEditTime: 2020-08-22 22:42:56
  */ 
 import Home from '../pages/Home/Home.js'
 import Index from '../pages/Index/Index.js'
 import Login from '../pages/Login/Login.js'
+import Photo from '../pages/Photo/Photo.js'
+import Theme from '../pages/Theme/Theme.js'
 
 import ArticleCategory from '../pages/Article/Category/Category.js'
 import ArticleList from '../pages/Article/List/List.js'
@@ -34,9 +36,8 @@ export const menus = [
       { path: '/user/info', title: '个人资料', component: UserInfo },
     ]
   },
-  {
-    path: '/theme', title: '主题设置', icon: 'AppstoreOutlined',
-  },
+  {path: '/photo', title: '图片集', icon: 'AppstoreOutlined', component: Photo },
+  {path: '/theme', title: '主题设置', icon: 'AppstoreOutlined', component: Theme },
 ]
 
 export const main = [

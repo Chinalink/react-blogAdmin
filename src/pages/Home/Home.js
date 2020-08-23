@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-07-11 20:01:04
- * @LastEditTime: 2020-08-22 14:54:49
+ * @LastEditTime: 2020-08-22 17:21:37
  */ 
 // lib
 import React, { Component } from 'react';
@@ -61,10 +61,6 @@ class Home extends Component {
     });
   }
 
-  componentDidMount() {
-    console.log(typeof (utils.sessionGetItem('userInfo')));
-  }
-  
   handlerMenu = ({ key }) => {
     const { history } = this.props
 
