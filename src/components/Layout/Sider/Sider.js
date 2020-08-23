@@ -2,7 +2,7 @@
  * @Description: 侧栏导航
  * @Author: HuGang
  * @Date: 2020-07-11 21:34:30
- * @LastEditTime: 2020-08-10 19:13:16
+ * @LastEditTime: 2020-08-23 19:28:06
  */ 
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
@@ -52,11 +52,14 @@ class LayoutSider extends Component {
   
   renderMenuXml = (routeItem) => {
     const MenuIcon = routeItem.icon && React.createElement(Icon[routeItem.icon], { style: { fontSize: '14px' } })
-    return (
-      <Menu.Item key={routeItem.path} icon={ routeItem.icon && MenuIcon }>
-        <Link to={routeItem.path}>{routeItem.title}</Link>
-      </Menu.Item>
-    )
+    if (!routeItem.menuHide) {
+      return (
+        <Menu.Item key={routeItem.path} icon={routeItem.icon && MenuIcon}>
+          <Link to={routeItem.path}>{routeItem.title}</Link>
+        </Menu.Item>
+      )
+    }
+    return []
   }
 
 }
