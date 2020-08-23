@@ -2,7 +2,7 @@
  * @Description: 分类目录
  * @Author: HuGang
  * @Date: 2020-07-25 09:27:47
- * @LastEditTime: 2020-08-14 00:53:09
+ * @LastEditTime: 2020-08-23 17:52:53
  */ 
 import React, { Component } from 'react';
 // 依赖组件
@@ -99,7 +99,7 @@ class Category extends Component {
       { key: 'name', title: '名称', dataIndex: 'name' },
       { key: 'alias', title: '别名', dataIndex: 'alias' },
       { key: 'desc', title: '分类描述', dataIndex: 'desc' },
-      { key: 'num', title: '文章数量', dataIndex: 'num' },
+      { key: 'articleTotal', title: '文章数量', dataIndex: 'articleTotal' },
       {
         key: 'action', title: '操作', render: (text, record, index) => (
           <div className="table-action">
