@@ -2,9 +2,9 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2020-08-02 19:01:33
- * @LastEditTime: 2020-08-22 22:28:32
+ * @LastEditTime: 2020-08-25 00:09:20
  */
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Upload, message, Modal } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 
@@ -17,12 +17,13 @@ class collection extends Component {
     super(props);
     this.state = {
       loading: false,
-      fileList: []
+      fileList: [],
+      picList: []
     }
   }
 
   render() {
-    const { previewVisible, previewImage, fileList, previewTitle } = this.state;
+    const { previewVisible, previewImage, fileList, previewTitle, picList } = this.state;
     const token = sessionStorage.getItem('token')
     
     const uploadButton = (
@@ -55,16 +56,44 @@ class collection extends Component {
 
     return (
       <div className="photo-container">
-        <ul>
+        {picList.map((year, yearIndex) => {
+          return <Fragment key={year.name}>
+            {
+              year.children.map((month, monthIndex) => {
+                return (
+                  <Fragment key={month.name}>
+                    <h3>日期：{year.name}-{month.name}</h3>
+                    <ul>
+                      {(yearIndex === 0 && monthIndex === 0) && <li className="photo-uploader"><Upload listType="picture-card" className="avatar-uploader" {...props} onChange={this.handleChange} onPreview={this.handlePreview}>
+                        {uploadButton}
+                      </Upload></li>}
+                      {(yearIndex === 0 && monthIndex === 0) && fileList.map((item) => {
+                        return <li key={item.name}><img src={`http://qf8zthosn.hn-bkt.clouddn.com/${item.name}`} alt="art_pic" /></li>
+                      })}
+                      {
+                        month.children.map((pic) => {
+                          return <li key={pic.name}><img src={`http://qf8zthosn.hn-bkt.clouddn.com/${pic.name}`} alt="art_pic" /></li>
+                        })
+                      }
+                    </ul>
+                  </Fragment>
+                )
+                
+              })
+            }
+          </Fragment>
+        })}
+        {/* <ul>
           <li className="photo-uploader">
             <Upload listType="picture-card" className="avatar-uploader" {...props} onChange={this.handleChange} onPreview={this.handlePreview}>
-              { uploadButton }
-            </Upload>
+              {uploadButton}
+            </Upload>}
           </li>
           {fileList.map((item) => {
             return <li key={item.name}><img src={`http://qf8zthosn.hn-bkt.clouddn.com/${item.name}`} alt="art_pic" /></li>
           })}
-        </ul>
+          
+        </ul> */}
         <Modal
           visible={previewVisible}
           title={previewTitle}
@@ -112,9 +141,23 @@ class collection extends Component {
   getPicList = async (params = {}) => {
     const res = await APIgetPicList(params)
     if (res.code === 0) {
-      console.log(res);
+      const picList = res.data.result
+      this.setState({ picList })
     }
   }
+
+  //点击预览
+  handlePreview = async file => {
+    if (!file.url && !file.preview) {
+      file.preview = await this.getBase64(file.originFileObj);
+    }
+
+    this.setState({
+      previewImage: file.url || file.preview,
+      previewVisible: true,
+      previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
+    });
+  };
 }
 
 export default collection;
