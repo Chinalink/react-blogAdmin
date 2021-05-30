@@ -1,64 +1,23 @@
-/*
- * @Description: 
- * @Author: HuGang
- * @Date: 2020-07-25 17:40:07
- * @LastEditTime: 2020-08-23 20:04:37
- */ 
-import md5 from 'js-md5'
-import Qs from 'qs'
+import { parse } from 'querystring';
+/* eslint no-useless-escape:0 import/prefer-default-export:0 */
 
-const utils = {
-  // 一维数组转树形数组
-  arrToTreeData(arr, parentArr, idName = 'parrentId') {
-    parentArr.map(pNode => {
-      let childArr = []
-
-      arr.map(cNode => {
-        if (cNode[idName] === pNode.id) {
-          childArr.push(cNode)
-        }
-        return cNode
-      })
-      if (childArr.length > 0) {
-        pNode.children = childArr
-        this.arrToTreeData(arr, childArr, idName)
-      }
-      return pNode
-    })
-    return parentArr
-  },
-  // qs序列化参数
-  qsToParams(params) {
-    return Qs.parse(params, { ignoreQueryPrefix: true })
-  },
-  // md5序列化
-  stringToMd5(value) {
-    return md5(value)
-  },
-  localGetItem(key) {
-    return localStorage.getItem(key)
-  },
-  localSetItem(key, value) {
-    localStorage.setItem(key, value)
-  },
-  localRemoveItem(key) {
-    localStorage.removeItem(key)
-  },
-  localClearItem() {
-    localStorage.clear()
-  },
-  sessionGetItem(key) {
-    return sessionStorage.getItem(key)
-  },
-  sessionSetItem(key, value) {
-    sessionStorage.setItem(key, value)
-  },
-  sessionRemoveItem(key) {
-    return sessionStorage.removeItem(key)
-  },
-  sessionClearItem() {
-    sessionStorage.clear()
+const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
+export const isUrl = (path) => reg.test(path);
+export const isAntDesignPro = () => {
+  if (ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site') {
+    return true;
   }
-}
 
-export default utils
+  return window.location.hostname === 'preview.pro.ant.design';
+}; // For the official demo site, it is used to turn off features that are not needed in the real development environment
+
+export const isAntDesignProOrDev = () => {
+  const { NODE_ENV } = process.env;
+
+  if (NODE_ENV === 'development') {
+    return true;
+  }
+
+  return isAntDesignPro();
+};
+export const getPageQuery = () => parse(window.location.href.split('?')[1]);
